@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=c99 -O2 -fopenmp  -rdynamic CMakeFiles/TECBC.dir/test/test_EM_cbc.c.o  -o TECBC  libLIB.a -O2 

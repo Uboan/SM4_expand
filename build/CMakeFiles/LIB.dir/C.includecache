@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/sm4_expand.h
+stdint.h
+-
+
+/home/uboan_linux/code/sm4_256/src/sm4_256_expand.c
+sm4_expand.h
+/home/uboan_linux/code/sm4_256/src/sm4_expand.h
+

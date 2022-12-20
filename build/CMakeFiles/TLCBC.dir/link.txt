@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=c99 -O2 -fopenmp  -rdynamic CMakeFiles/TLCBC.dir/test/test_LM_cbc.c.o  -o TLCBC  libLIB.a -O2 

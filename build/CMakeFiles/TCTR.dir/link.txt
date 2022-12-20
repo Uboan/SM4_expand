@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=c99 -O2 -fopenmp  -rdynamic CMakeFiles/TCTR.dir/test/TEST_ctr.c.o  -o TCTR  libLIB.a -O2 

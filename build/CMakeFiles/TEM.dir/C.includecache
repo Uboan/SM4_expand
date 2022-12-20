@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/pksc7_padding.h
+stdint.h
+-
+
+../include/sm4.h
+stdint.h
+-
+
+../include/sm4_256_even_mansour.h
+stdint.h
+-
+sm4.h
+../include/sm4.h
+
+../include/util.h
+stdio.h
+-
+stdlib.h
+-
+stdint.h
+-
+
+/home/uboan_linux/code/sm4_256/test/test_even_mansour.c
+stdio.h
+-
+sm4.h
+/home/uboan_linux/code/sm4_256/test/sm4.h
+stdlib.h
+-
+string.h
+-
+pksc7_padding.h
+/home/uboan_linux/code/sm4_256/test/pksc7_padding.h
+util.h
+/home/uboan_linux/code/sm4_256/test/util.h
+sm4_256_even_mansour.h
+/home/uboan_linux/code/sm4_256/test/sm4_256_even_mansour.h
+

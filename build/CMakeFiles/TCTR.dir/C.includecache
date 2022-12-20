@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/ctr_sm4_256.h
+stdint.h
+-
+sm4.h
+../include/sm4.h
+
+../include/sm4.h
+stdint.h
+-
+
+../include/util.h
+stdio.h
+-
+stdlib.h
+-
+stdint.h
+-
+
+/home/uboan_linux/code/sm4_256/test/TEST_ctr.c
+omp.h
+-
+ctr_sm4_256.h
+/home/uboan_linux/code/sm4_256/test/ctr_sm4_256.h
+stdint.h
+-
+util.h
+/home/uboan_linux/code/sm4_256/test/util.h
+time.h
+-
+string.h
+-
+sys/wait.h
+-
+
