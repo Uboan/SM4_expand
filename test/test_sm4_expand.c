@@ -2,9 +2,9 @@
 #include"util.h"
 
 int main(){
-    uint8_t *key={"12345678901234567890123456789012"};
+    uint8_t *key={"12345678901234567890123456789012"};//256 bit 主密钥
     SM4_EXPAND_KEY *ks;
-    ks = (SM4_EXPAND_KEY*)malloc(sizeof(SM4_EXPAND_KEY));
+    ks = (SM4_EXPAND_KEY*)malloc(sizeof(SM4_EXPAND_KEY));//先分配空间，然后再set key
     sm4_expand_set_key(key,ks);
     uint8_t data[16]={"1234567890123456"};
     uint8_t data_encrypted[17];
