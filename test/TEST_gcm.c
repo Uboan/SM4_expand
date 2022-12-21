@@ -50,7 +50,7 @@ void init_test_data(uint8_t *buf,long int amount){
 	}
 
 
-int maintest(int block){
+int maintest(){//1 for SM4-256, 2 for SM4-128
 	
 	GCM128_CONTEXT *ctx;
 	char KEY[]={ 0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
@@ -63,7 +63,7 @@ int maintest(int block){
     0x2c, 0xf3, 0x5a, 0xbd, 0x2b, 0xa6, 0xfa, 0xb4};
 
 	//SM4_256_KEY *KS = (SM4_256_KEY*)malloc(sizeof(SM4_256_KEY));
-	u8 in[64]={"12345asdfgh23456789012345678901234567890123456789012345678901234"},out[100]={0x00};
+	u8 in[64]={"12345asdfgh23456789012345678901234567890123456789012345678901234"},out[100]={0x00},outde[100]={0x00};
 	u8 out_de[] = {0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
     0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92, 0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
     0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92,0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
@@ -71,11 +71,12 @@ int maintest(int block){
     0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92, 0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
     0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92, 0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
     0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92};
-	char cyphername[4][16]={"LM GCM","EM GCM"," ","SM4-128 "};
-	int cypher=block;//1 for LM , 2 for EM, 4 for SM4-128
+
+	char cyphername[2][16]={"SM4-256-GCM","SM4-128-GCM"};
+	
 	
 	ctx = (GCM128_CONTEXT*)malloc(sizeof(GCM128_CONTEXT));
-	gcm128_init(ctx,KEY128,cypher);
+	gcm128_init(ctx,KEY128);
 	uint8_t buf[1048577];
 	uint8_t out_buf[1048577];
 	//uint8_t dec_buf[1048576];
@@ -101,6 +102,7 @@ int maintest(int block){
 	gcm128_encrypt(ctx,in,out,64);
 	printf("\nout:\n");
 	dump_hex(out,64);
+	gcm128_setiv(ctx,IV,12);
 	gcm128_decrypt(ctx,out,in,64);
 	printf("\nrecovered:\n");
 	dump_hex(in,64);
@@ -124,7 +126,7 @@ int maintest(int block){
 		}
 		finish_crypt_time = time(NULL);
 
-		printf("doing %s for 3s on %d size blocks %lld in %.2fs\t",cyphername[cypher-1],amount,i,(double)(finish_crypt_time - start_crypt_time));
+		printf("doing %s for 3s on %d size blocks %lld in %.2fs\t",cyphername[0],amount,i,(double)(finish_crypt_time - start_crypt_time));
 		printf("%.2fMbps\n",(double)(i*amount/1000000));
 	
 		//gcm128_setiv(ctx,IV,12);
@@ -142,7 +144,7 @@ int maintest(int block){
 			}
 		endtime = end_rdtsc();
 		ans = endtime - starttime;
-		printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n",cyphername[cypher-1],amount,ans/amount/TEST);
+		printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n",cyphername[0],amount,ans/amount/TEST);
 		
 	
 		
@@ -174,9 +176,9 @@ int maintest(int block){
 	
 int main(){
 	
-maintest(1);
-maintest(2);
-maintest(4);
+maintest();
+
+
 	
 	return 0;
 	}

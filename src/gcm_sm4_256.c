@@ -1,5 +1,4 @@
 #include "gcm_sm4_256.h"
-#include "crypto.h"
 #include <string.h>
 #include <omp.h>
 
@@ -263,9 +262,9 @@ static void gcm_ghash_4bit(u64 Xi[2], const u128 Htable[16],
 
 void gcm_memset(GCM128_CONTEXT *ctx){
 	ctx->ares=0;
-	ctx->block=0;
+	
 	ctx->mres = 0;
-	ctx->ks = (SM4_256_KEY*)malloc(sizeof(SM4_256_KEY));
+	ctx->ks = (SM4_EXPAND_KEY*)malloc(sizeof(SM4_EXPAND_KEY));
 	MEMSET(Yi);
 	MEMSET(Xi);
 	MEMSET(EK0);
@@ -293,7 +292,7 @@ void gcm_memset(GCM128_CONTEXT *ctx){
 
 
 
-void gcm128_init(GCM128_CONTEXT *ctx, void *key, int block)//generate round keys and lookup_tables
+void gcm128_init(GCM128_CONTEXT *ctx, void *key)//generate round keys and lookup_tables
 {
     const union {
         long one;
@@ -301,28 +300,13 @@ void gcm128_init(GCM128_CONTEXT *ctx, void *key, int block)//generate round keys
     } is_endian = { 1 };
 	
     gcm_memset(ctx);
-    ctx->block = block;
     ctx->key = key;
 	
 	////////////////
 	////
-	
-	switch(block){
-		case Lai_Massey:
-			sm4_256_set_key(key,ctx->ks,1);
-			crypto_encrypt(ctx->H.c,ctx->H.c,ctx->ks,1);
-			break;
-		case Even_Mansour:
-			sm4_256_set_key(key,ctx->ks,2);
-			crypto_encrypt(ctx->H.c,ctx->H.c,ctx->ks,2);
-			break;
-        case 4:
-           
-			sm4_256_set_key(key,ctx->ks,4);
-			crypto_encrypt(ctx->H.c,ctx->H.c,ctx->ks,4);
-			break;
-		
-		}
+    sm4_expand_set_key(key,ctx->ks);
+    sm4_expand_encrypt(ctx->H.c,ctx->H.c,ctx->ks);
+
 	
 	/*should be altered to (block)(ctx->H.c,ctx->H.c,key)*/
     //(*block) (ctx->H.c, ctx->H.c, key);
@@ -422,8 +406,8 @@ void gcm128_setiv(GCM128_CONTEXT *ctx, const unsigned char *iv,
         else
             ctr = ctx->Yi.d[3];
     }
+	sm4_expand_encrypt(ctx->Yi.c, ctx->EK0.c,ctx->ks);
 	
-	crypto_encrypt(ctx->Yi.c, ctx->EK0.c,ctx->ks,ctx->block);
     //(*ctx->block) (ctx->Yi.c, ctx->EK0.c, ctx->key);//ctx->EK0.c  to  store the encrypted iv_ctr
     ++ctr;
     if (is_endian.little)
@@ -557,99 +541,14 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
                 }
             }
 	
-// if no GHASH()
-			//printf("??\n");printf("??\n");printf("??\n");printf("??\n");
-			#ifdef GCM_PARALLEL//uses parallel
-			{
-				//printf("??\n");
-                //GCM_PARALLEL为线程个数上限
-                size_t PARALLEL = len/16;
-                if (PARALLEL == 0)
-                {
-                    PARALLEL = 1;
-                }
 
-                if (PARALLEL > GCM_PARALLEL){
-                    PARALLEL = GCM_PARALLEL;
-                }
-				omp_set_num_threads(PARALLEL);
-				
-			#pragma omp parallel 
-			{
-					int omp_parallel_num = omp_get_thread_num();
-					int ctr_in = ctr+omp_parallel_num;
-					
-					/*         local  variables           */
-					union {//the variables inside each processor
-						u64 u[2];
-						u32 d[4];
-						u8 c[16];
-						size_t t[16 / sizeof(size_t)];
-					} YiP, EkiP,XiP;
-					YiP.u[0] = ctx->Yi.u[0];
-					YiP.u[1] = ctx->Yi.u[1];
-					uint8_t *out_t = out+omp_parallel_num*(16);
-					const uint8_t *in_t = (in+omp_parallel_num*(16));
-					
-					/*         local  variables end       */
-					
-					
-					PUTU32(YiP.c + 12, ctr_in);//initial 
-					//printf("p(%d)\n",omp_parallel_num);
-					int length = len;
-					length-=(16*omp_parallel_num);//if detected the data block has allocated enough processors then it would get in the loop below 
-					//printf("length in p(%d):%d\n",omp_parallel_num,length);
-					while(length>=16){
-						//printf("p(%d)\n",omp_parallel_num);
-						size_t *out_t_t = (size_t *)out_t;
-						size_t *in_t_t = (const size_t *)in_t;
-						
-						crypto_encrypt(YiP.c,EkiP.c,ctx->ks,ctx->block);
-						//dump_hex(EkiP.c,16);
-						ctr_in +=PARALLEL;
-						PUTU32(YiP.c + 12, ctr_in);
-					
-						for(int q=0;q<16/sizeof(size_t);++q){
-							out_t_t[q] = in_t_t[q]^EkiP.t[q];
-					
-							}
-						//printf("P(%d) \n",omp_parallel_num);
-						in_t+=(16 *PARALLEL);
-				
-						out_t+=(16 *PARALLEL);
-						length-=(16 *PARALLEL);
-					}
-					
-					
-				
-			}
-				
-				while(len>=16){//process of GMUL
-					size_t *out_t = (size_t *)out;
-					const size_t *in_t = (const size_t *)in;
-					
-					for (i = 0; i < 16 / sizeof(size_t); ++i)
-						ctx->Xi.t[i] ^= out_t[i];//Xi saves the tag
-					
-					
-					gcm_gmult_4bit(ctx->Xi.u,ctx->Htable);//galois multiply of H and Y
-					//GCM_MUL(ctx, Xi);//starting GHASH
-					out += 16;
-					in += 16;
-					len -= 16;//end GHASH
-					
-				}
-			
-				
-			}
-			
-			#else
 
             while (len >= 16) {
 
                 size_t *out_t = (size_t *)out;
                 const size_t *in_t = (const size_t *)in;
-				crypto_encrypt(ctx->Yi.c,ctx->EKi.c,ctx->ks,ctx->block);
+                sm4_expand_encrypt(ctx->Yi.c, ctx->EKi.c,ctx->ks);
+				
                 //(*block) (ctx->Yi.c, ctx->EKi.c, key);
 
                 ++ctr;
@@ -668,7 +567,7 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
                 len -= 16;//end GHASH
             }
 			
-			#endif
+		
 			
             int q = 0;
             while (len ) {
@@ -767,103 +666,12 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
                 }
             }
 
-			
-			#ifdef GCM_PARALLEL//uses parallel
-			{
-				//GCM_PARALLEL为线程个数上限
-                size_t PARALLEL = len/16;
-                if (PARALLEL == 0)
-                {
-                    PARALLEL = 1;
-                }
-
-                if (PARALLEL > GCM_PARALLEL){
-                    PARALLEL = GCM_PARALLEL;
-                }
-				omp_set_num_threads(PARALLEL);
-				//dump_hex(out,64);
-			#pragma omp parallel 
-			{
-					int omp_parallel_num = omp_get_thread_num();
-					int ctr_in = ctr+omp_parallel_num;
-					
-					/*         local  variables           */
-					union {//the variables inside each processor
-						u64 u[2];
-						u32 d[4];
-						u8 c[16];
-						size_t t[16 / sizeof(size_t)];
-					} YiP, EkiP,XiP;
-					YiP.u[0] = ctx->Yi.u[0];
-					YiP.u[1] = ctx->Yi.u[1];
-					uint8_t *out_t = out+omp_parallel_num*(16);
-					const uint8_t *in_t = (in+omp_parallel_num*(16));
-					
-					/*         local  variables end       */
-					
-					
-					PUTU32(YiP.c + 12, ctr_in);//initial 
-					
-					int length = len;
-					length-=(16*omp_parallel_num);//if detected the data block has allocated enough processors then it would get in the loop below 
-					while(length>=16){
-						size_t *out_t_t = (size_t *)out_t;
-						size_t *in_t_t = (const size_t *)in_t;
-					
-							crypto_encrypt(YiP.c,EkiP.c,ctx->ks,ctx->block);
 		
-						ctr_in +=PARALLEL;
-						PUTU32(YiP.c + 12, ctr_in);
-					
-						for(int q=0;q<16/sizeof(size_t);++q){
-							out_t_t[q] = in_t_t[q]^EkiP.t[q];
-							
-							}
-						//printf("p(%d)\t",omp_parallel_num);
-							
-
-						in_t+=(16 *PARALLEL);
-				
-						out_t+=(16 *PARALLEL);
-						length-=(16 *PARALLEL);
-					}
-					
-					
-				
-			}
-				//dump_hex(out,64);
-				while(len>=16){//process of GMUL
-					size_t *out_t = (size_t *)out;
-					
-					const size_t *in_t = (const size_t *)in;
-					
-					for (i = 0; i < 16 / sizeof(size_t); ++i){//the only differences bewteen encryption and decryption
-						size_t c = in_t[i];
-						//out_t[i] = in_t[i] ^ ctx->EKi.t[i];//remember only X-OR once
-						ctx->Xi.t[i] ^= c;
-					}
-					
-					gcm_gmult_4bit(ctx->Xi.u,ctx->Htable);//galois multiply of H and Y
-					//GCM_MUL(ctx, Xi);//starting GHASH
-					//printf("out:");
-					//dump_hex(out_t,16);
-					out += 16;
-					in += 16;
-					len -= 16;//end GHASH
-					
-				}
-			
-				
-			}
-			
-			#else
-
-			
             while (len >= 16) {
                 size_t *out_t = (size_t *)out;
                 const size_t *in_t = (const size_t *)in;
-				crypto_encrypt(ctx->Yi.c,ctx->EKi.c,ctx->ks,ctx->block);
-
+				sm4_expand_encrypt(ctx->Yi.c, ctx->EKi.c,ctx->ks);
+                
                 //(*block) (ctx->Yi.c, ctx->EKi.c, key);
                 ++ctr;
 				
@@ -886,7 +694,7 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
                 in += 16;
                 len -= 16;
             }
-#endif
+
             int q = 0;
             while (len) {
 

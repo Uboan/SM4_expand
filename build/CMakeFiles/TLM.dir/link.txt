@@ -1,1 +1,0 @@
-/usr/bin/cc  -std=c99 -O2 -fopenmp  -rdynamic CMakeFiles/TLM.dir/test/test_lai_massey.c.o  -o TLM  libLIB.a -O2 

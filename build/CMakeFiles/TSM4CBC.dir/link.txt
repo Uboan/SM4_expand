@@ -1,1 +1,0 @@
-/usr/bin/cc  -std=c99 -O2 -fopenmp  -rdynamic CMakeFiles/TSM4CBC.dir/test/test_sm4_cbc.c.o  -o TSM4CBC  libLIB.a -O2 

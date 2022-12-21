@@ -1,7 +1,6 @@
-
 #include <stdint.h>
-#include <crypto.h>
 #include <stdio.h>
+#include "sm4_expand.h"
 //codes from modes.h
 
 #if (defined(_WIN32) || defined(_WIN64)) && !defined(__MINGW32__)
@@ -36,8 +35,8 @@ typedef struct gcm128_context GCM128_CONTEXT;
 
 #define TABLE_BITS 4
 
-GCM128_CONTEXT *gcm128_new(void *key, int block);
-void gcm128_init(GCM128_CONTEXT *ctx, void *key, int block);
+GCM128_CONTEXT *gcm128_new(void *key);
+void gcm128_init(GCM128_CONTEXT *ctx, void *key);
 void gcm128_setiv(GCM128_CONTEXT *ctx, const unsigned char *iv,
                            size_t len);
 int gcm128_aad(GCM128_CONTEXT *ctx, const unsigned char *aad,
@@ -82,8 +81,8 @@ struct gcm128_context {
    
 #endif
     unsigned int mres, ares;
-    int block;//1 for LM,2 for EM , 3 for test only gcm mode and 4 for SM4-128
+    
     void *key;
-	SM4_256_KEY *ks;
+	SM4_EXPAND_KEY *ks;
 };
 
