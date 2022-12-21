@@ -9,15 +9,9 @@ make
 
 然后生成可执行文件如下：
 
-TEM 测试SM4-256-EM（单分组）的性能
-TLM 测试SM4-256-LM（单分组）的性能
-TECB 测试SM4-128和SM4-256 4个方案的（单分组）性能对比
-
-TCBC 测试SM4-256-LM的CBC性能
-TECBC 测试SM4-256-EM的CBC性能
-TSM4CBC 测试SM4-128的CBC性能
-
-TCTR 测试SM4-256-LM和EM的CTR性能
-TGCM 测试SM4-256-LM和EM的GCM和SM4-128 GCM的性能
+TSM4EXPAND 测试单个分组的SM4 expand 的性能与SM4-128以及SM4-256-DESX和SM4-256-3DES 的性能对比
+TCBC 测试SM4-256 expand 的CBC性能
+TCTR 测试SM4-256 expand 和EM的CTR性能
+TGCM 测试SM4-256 expand 的性能
 
 
