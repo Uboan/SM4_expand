@@ -49,41 +49,41 @@ int main(){
 	printf("\n");
 	sm4_expand_cbc_decrypt(out,out1,ivec1,32,ks);
 	dump_hex(out1,32);
-	// init_test_data(plaintext,1048577);
-	// for(amount=16;amount<=1048576;amount*=4){
+	 init_test_data(plaintext,1048577);
+	 for(amount=16;amount<=1048576;amount*=4){
 		
 	
 		
 		
-	// 	uint64_t i=0;
+	 	uint64_t i=0;
 	
-	// 	time_t endwait = time(NULL) + 3,finish_crypt_time,start_crypt_time;
+	 	time_t endwait = time(NULL) + 3,finish_crypt_time,start_crypt_time;
 	
-	// 	start_crypt_time = time(NULL);
-	// 	//starttime = start_rdtsc();
-	// 	while(time(NULL)<endwait)
-	// 	{
-	// 		i++;
+	 	start_crypt_time = time(NULL);
+	 	//starttime = start_rdtsc();
+	 	while(time(NULL)<endwait)
+	 	{
+	 		i++;
 			 
-	// 		sm4_expand_cbc_decrypt(input,output,ivec,amount,ks);
-	// 	}
-	// 	finish_crypt_time = time(NULL);
+	 		sm4_expand_cbc_decrypt(input,output,ivec,amount,ks);
+	 	}
+	 	finish_crypt_time = time(NULL);
 
-	// 	printf("doing  for 3s on %d size blocks %lld in %.2fs\t",amount,i,(double)(finish_crypt_time - start_crypt_time));
-	// 	printf("%.2fMbps\n",(double)(i*amount/1000000));//million bit
+ 	printf("doing  for 3s on %d size blocks %lld in %.2fs\t",amount,i,(double)(finish_crypt_time - start_crypt_time));
+	 	printf("%.2fMbps\n",(double)(i*amount/1000000));//million bit
 	
 		
-	// 	starttime = start_rdtsc();
-	// 	for(i=0;i<TEST;i++){
-	// 		sm4_expand_cbc_encrypt(input,output,ivec,amount,ks);
-	// 		}
-	// 	endtime = end_rdtsc();
-	// 	ans = endtime - starttime;
-	// 	printf("cpu cycles/byte on %d size blocks for :%llu \n",amount,ans/amount/TEST);
+	 	starttime = start_rdtsc();
+	 	for(i=0;i<TEST;i++){
+	 		sm4_expand_cbc_encrypt(input,output,ivec,amount,ks);
+	 		}
+	 	endtime = end_rdtsc();
+	 	ans = endtime - starttime;
+	 	printf("cpu cycles/byte on %d size blocks for :%llu \n",amount,ans/amount/TEST);
 		
 	
 		
-	// }	
+	 }	
 	
 
      free(ks);
