@@ -31,6 +31,7 @@ int test_correctness(){
 
     uint8_t dt_key[KEY_ARRAY_SIZE][32];//随机生成 1024组256 bit密钥
     SM4_EXPAND_KEY *ks;
+    int count=0;
     for(int i=0;i<KEY_ARRAY_SIZE;i++)
         rand_uint8_n(dt_key[i],32);
     
@@ -47,9 +48,17 @@ int test_correctness(){
         sm4_expand_set_key(dt_key[i],ks);
 
         for(int j=0;j<TEST_CASE_SIZE;j++){
-            sm4_expand_encrypt(dt_plaintext,dt_ciphertext,ks);
-            sm4_expand_decrypt(dt_ciphertext,dt_decryptedtext,ks);
-            if(Is_equal(dt_plaintext,dt_decryptedtext,16)!=1){
+            sm4_expand_encrypt(dt_plaintext[j],dt_ciphertext[j],ks);
+            sm4_expand_decrypt(dt_ciphertext[j],dt_decryptedtext[j],ks);
+            if(count++<10){
+                printf("key:");
+                dump_hex(dt_key[i],16);
+                printf("plaintext:");
+                dump_hex(dt_plaintext[j],16);
+                printf("decrypted text:");
+                dump_hex(dt_decryptedtext[j],16);
+            }
+            if(Is_equal(dt_plaintext[j],dt_decryptedtext[j],16)!=1){
                 free(ks);
                 return 0;
             }
@@ -155,7 +164,7 @@ int main(){
     #endif
 
     if(test_correctness()==1)
-        printf("----Correctness Test----\n for %d keys,and for %d plaintexts passed!\n",KEY_ARRAY_SIZE,TEST_CASE_SIZE);
+        printf("----Correctness Test----\n for %d keys,and for %d plaintexts passed!\n\n",KEY_ARRAY_SIZE,TEST_CASE_SIZE);
 
     scheme_cp_test();
     return 0;
