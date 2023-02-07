@@ -3,6 +3,7 @@
 #include"sm4_256_desx.h"
 #include"util.h"
 #include"stdlib.h"
+#include <time.h>
 #define TEST_CASE_SIZE 1024
 #define KEY_ARRAY_SIZE 1024
 
@@ -46,15 +47,18 @@ int test_correctness(){
     for(int i=0;i<KEY_ARRAY_SIZE;i++){
 
         sm4_expand_set_key(dt_key[i],ks);
-
+        if(count<10){
+                printf("key:");
+                dump_hex(dt_key[i],32);
+            }
         for(int j=0;j<TEST_CASE_SIZE;j++){
             sm4_expand_encrypt(dt_plaintext[j],dt_ciphertext[j],ks);
             sm4_expand_decrypt(dt_ciphertext[j],dt_decryptedtext[j],ks);
             if(count++<10){
-                printf("key:");
-                dump_hex(dt_key[i],16);
                 printf("plaintext:");
                 dump_hex(dt_plaintext[j],16);
+                printf("ciphertext:");
+                dump_hex(dt_ciphertext[j],16);
                 printf("decrypted text:");
                 dump_hex(dt_decryptedtext[j],16);
             }
@@ -92,7 +96,18 @@ int scheme_cp_test(){//方案对比测试：SM4-128，SM4-256-3DES，SM4-256-DES
 		}
 	endtime = end_rdtsc();
 	ans = endtime - starttime;
-	printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n","SM4-128",16,ans/TEST/16);
+    time_t endwait = time(NULL) + 3,finish_crypt_time,start_crypt_time;
+    start_crypt_time = time(NULL);
+    while(time(NULL)<endwait)
+    {
+        i++;
+        ossl_sm4_encrypt(data,data_encrypted,ks_128);
+    }
+    finish_crypt_time = time(NULL);
+
+    printf("doing SM4-128 for 3s on %d size blocks %lld in %.2fs\t",16,i,(double)(finish_crypt_time - start_crypt_time));
+    printf("%.2fMbps\n",(double)(i*16/1000000));//million bit
+	printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n\n","SM4-128",16,ans/TEST/16);
 			
     //SM4-256-3des:
     SM4_3des_KEY *ks_3des;
@@ -105,8 +120,20 @@ int scheme_cp_test(){//方案对比测试：SM4-128，SM4-256-3DES，SM4-256-DES
 		
 		}
 	endtime = end_rdtsc();
+
 	ans = endtime - starttime;
-	printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n","SM4-256-3des",16,ans/TEST/16);
+    endwait = time(NULL) + 3;
+    start_crypt_time = time(NULL);
+    while(time(NULL)<endwait)
+    {
+        i++;
+        sm4_256_encrypt_3des(data,data_encrypted,ks_3des);
+    }
+    finish_crypt_time = time(NULL);
+
+    printf("doing 3des for 3s on %d size blocks %lld in %.2fs\t",16,i,(double)(finish_crypt_time - start_crypt_time));
+    printf("%.2fMbps\n",(double)(i*16/1000000));//million bit
+    printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n\n","SM4-256-3des",16,ans/TEST/16);
 			
 	//SM4-256-desx:
     SM4_KEY *ks_desx;
@@ -120,8 +147,19 @@ int scheme_cp_test(){//方案对比测试：SM4-128，SM4-256-3DES，SM4-256-DES
 		}
 	endtime = end_rdtsc();
 	ans = endtime - starttime;
-	printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n","SM4-256-desx",16,ans/TEST/16);
-			
+
+    endwait = time(NULL) + 3;
+    start_crypt_time = time(NULL);
+    while(time(NULL)<endwait)
+    {
+        i++;
+        sm4_256_encrypt_desx(data,data_encrypted,key+16,ks_desx);
+    }
+    finish_crypt_time = time(NULL);
+
+    printf("doing desx for 3s on %d size blocks %lld in %.2fs\t",16,i,(double)(finish_crypt_time - start_crypt_time));
+    printf("%.2fMbps\n",(double)(i*16/1000000));//million bit
+	printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n\n","SM4-256-desx",16,ans/TEST/16);
 
     //SM4-expand
     SM4_EXPAND_KEY *ks;
@@ -135,7 +173,22 @@ int scheme_cp_test(){//方案对比测试：SM4-128，SM4-256-3DES，SM4-256-DES
 		}
 	endtime = end_rdtsc();
 	ans = endtime - starttime;
-	printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n","SM4-256-expand",16,ans/TEST/16);
+
+   endwait = time(NULL) + 3;
+    start_crypt_time = time(NULL);
+    while(time(NULL)<endwait)
+    {
+        i++;
+        sm4_expand_encrypt(data,data_encrypted,ks);
+    }
+    finish_crypt_time = time(NULL);
+
+    printf("doing SM4-Expand for 3s on %d size blocks %lld in %.2fs\t",16,i,(double)(finish_crypt_time - start_crypt_time));
+    printf("%.2fMbps\n",(double)(i*16/1000000));//million bit
+		
+
+
+	printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n\n","SM4-256-expand",16,ans/TEST/16);
 		
     
 
