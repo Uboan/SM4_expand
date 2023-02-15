@@ -16,8 +16,6 @@ void rand_uint8_n(uint8_t *data,int n){
         r=(rand()+i)%256;
         data[i] = 0x00+r;
     }
-
-
 }
 
 int Is_equal(uint8_t *data1,uint8_t *data2,int n){//equal:return 1
@@ -68,10 +66,6 @@ int test_correctness(){
             }
                 
         }
-        
-
-
- 
     }
     //printf(dt);
     return 1;

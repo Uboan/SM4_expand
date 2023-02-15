@@ -2,5 +2,6 @@
     "files.associations": {
         "sm4_expand.h": "c",
         "sm4.h": "c"
-    }
+    },
+    "cmake.configureOnOpen": true
 }

@@ -152,7 +152,7 @@ int sm4_expand_set_key(const uint8_t *key, SM4_EXPAND_KEY *ks)
         
         0x80878E95, 0x9CA3AAB1, 0xB8BFC6CD, 0xD4DBE2E9,//expanded part
         0xF0F7FE05, 0x0C131A21, 0x282F363D, 0x444B5259,
-        0x60676E75, 0x7C838A91,0x989FA6AD, 0xB4BBC2C9
+        0x60676E75, 0x7C838A91, 0x989FA6AD, 0xB4BBC2C9
     };
 
     uint32_t K[8];
