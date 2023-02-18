@@ -117,15 +117,15 @@ static void gcm_gmult_4bit(u64 Xi[2], const u128 Htable[16])
         long one;
         char little;
     } is_endian = {1};
-    nlo = ((const u8 *)Xi)[15];
-    nhi = nlo >> 4;
-    nlo &= 0xf;
+    nlo = ((const u8 *)Xi)[15]; 
+    nhi = nlo >> 4; 
+    nlo &= 0xf; 
     Z.hi = Htable[nlo].hi;
     Z.lo = Htable[nlo].lo;
 
     while (1)
     {
-        rem = (size_t)Z.lo & 0xf; // 后4位
+        rem = (size_t)Z.lo & 0xf;//后4位
         Z.lo = (Z.hi << 60) | (Z.lo >> 4);
         Z.hi = (Z.hi >> 4);
         if (sizeof(size_t) == 8)
@@ -290,11 +290,11 @@ void gcm128_init(GCM128_CONTEXT *ctx, void *key) // generate round keys and look
         char little;
     } is_endian = {1};
 
-    gcm_memset(ctx); // 初始化
-    ctx->key = key;  // Mainkey -- 128bit
+    gcm_memset(ctx); //初始化
+    ctx->key = key; //Mainkey -- 128bit
 
-    sm4_expand_set_key(key, ctx->ks);                // get roundkey
-    sm4_expand_encrypt(ctx->H.c, ctx->H.c, ctx->ks); // generate hash mainkey for GHASH_H
+    sm4_expand_set_key(key, ctx->ks); //get roundkey 
+    sm4_expand_encrypt(ctx->H.c, ctx->H.c, ctx->ks); //generate hash mainkey for GHASH_H
 
     if (is_endian.little)
     {
@@ -303,8 +303,8 @@ void gcm128_init(GCM128_CONTEXT *ctx, void *key) // generate round keys and look
         ctx->H.u[0] = BSWAP8(ctx->H.u[0]);
         ctx->H.u[1] = BSWAP8(ctx->H.u[1]);
 #else
-        u8 *p = ctx->H.c;                               // 起始位置
-        u64 hi, lo;                                     // 计算机无法直接表示128bit数据，因此用2个64bit变量的结构表示
+        u8 *p = ctx->H.c; //起始位置
+        u64 hi, lo; //计算机无法直接表示128bit数据，因此用2个64bit变量的结构表示
         hi = (u64)GETU32(p) << 32 | GETU32(p + 4);      // p[0~7]
         lo = (u64)GETU32(p + 8) << 32 | GETU32(p + 12); // p[8~15]
         ctx->H.u[0] = hi;
@@ -313,7 +313,7 @@ void gcm128_init(GCM128_CONTEXT *ctx, void *key) // generate round keys and look
     }
 
 #if TABLE_BITS == 4
-    gcm_init_4bit(ctx->Htable, ctx->H.u); // from hash mainkey generate 16 hash subkey
+    gcm_init_4bit(ctx->Htable, ctx->H.u);//from hash mainkey generate 16 hash subkey
 #endif
 }
 
@@ -411,26 +411,24 @@ int gcm128_aad(GCM128_CONTEXT *ctx, const unsigned char *aad,
     size_t i;
     unsigned int n;
     u64 alen = ctx->len.u[0]; // add length,  ctx->len.u[0] = 0
-    // u64 := unsigned long long
+    //u64 := unsigned long long 
     if (ctx->len.u[1]) // length of message == 0
         return -2;
-    alen += len;                                                   // alen = ctx->len.u[0] + len
+    alen += len; //alen = ctx->len.u[0] + len 
     if (alen > (U64(1) << 61) || (sizeof(len) == 8 && alen < len)) // larger than anything
         return -1;
-    ctx->len.u[0] = alen; // alen = len = 20
-    n = ctx->ares;
-    if (n)
+    ctx->len.u[0] = alen; //alen = len = 20
+    n = ctx->ares; 
+    if (n) 
     { // last block of the add
-        while (n && len)
-        {
+        while (n && len){
             ctx->Xi.c[n] ^= *(aad++);
             --len;
             n = (n + 1) % 16; //???
         }
         if (n == 0)
             gcm_gmult_4bit(ctx->Xi.u, ctx->Htable);
-        else
-        {
+        else{
             ctx->ares = n;
             return 0;
         }
@@ -443,17 +441,15 @@ int gcm128_aad(GCM128_CONTEXT *ctx, const unsigned char *aad,
         len -= i;
     }
 #else
-    while (len >= 16)
-    {
-        for (i = 0; i < 16; ++i)                // aad = A(外边定义的)
-            ctx->Xi.c[i] ^= aad[i];             // Xi.c stores add
-        gcm_gmult_4bit(ctx->Xi.u, ctx->Htable); //
+    while (len >= 16) {
+        for (i = 0; i < 16; ++i) //aad = A(外边定义的)
+            ctx->Xi.c[i] ^= aad[i]; // Xi.c stores add
+        gcm_gmult_4bit(ctx->Xi.u, ctx->Htable);//
         aad += 16;
         len -= 16;
     }
 #endif
-    if (len)
-    {
+    if (len){
         n = (unsigned int)len; // where n changed
         for (i = 0; i < len; ++i)
             ctx->Xi.c[i] ^= aad[i];
@@ -462,11 +458,11 @@ int gcm128_aad(GCM128_CONTEXT *ctx, const unsigned char *aad,
     return 0;
 }
 
+
 int gcm128_encrypt(GCM128_CONTEXT *ctx,
                    const unsigned char *in, unsigned char *out,
                    size_t len)
 {
-    // printf("aishldli");
     const union
     {
         long one;
@@ -519,100 +515,27 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
                     return 0;
                 }
             }
-        #ifdef GCM_PARALLEL
-            // uses parallel
+
+            while (len >= 16)
             {
-                // printf("??\n");
-                omp_set_num_threads(GCM_PARALLEL);
-                // printf("%d ", GCM_PARALLEL);
-                // omp_set_num_threads(parallell);
-                int parallell = GCM_PARALLEL;
-#pragma omp parallel
-                {
-                    int omp_parallel_num = omp_get_thread_num();
-                    int ctr_in = ctr + omp_parallel_num;
+                size_t *out_t = (size_t *)out;
+                const size_t *in_t = (const size_t *)in;
+                sm4_expand_encrypt(ctx->Yi.c, ctx->EKi.c, ctx->ks);
 
-                    /*         local  variables           */
-                    union
-                    { // the variables inside each processor
-                        u64 u[2];
-                        u32 d[4];
-                        u8 c[16];
-                        size_t t[16 / sizeof(size_t)];
-                    } YiP, EkiP, XiP;
-                    YiP.u[0] = ctx->Yi.u[0];
-                    YiP.u[1] = ctx->Yi.u[1];
-                    uint8_t *out_t = out + omp_parallel_num * (16);
-                    const uint8_t *in_t = (in + omp_parallel_num * (16));
+                ++ctr;
+                if (is_endian.little)
+                    PUTU32(ctx->Yi.c + 12, ctr);
+                else
+                    ctx->Yi.d[3] = ctr;
+                for (i = 0; i < 16 / sizeof(size_t); ++i)
+                    ctx->Xi.t[i] ^= out_t[i] = in_t[i] ^ ctx->EKi.t[i]; // Xi saves the cyphertext
 
-                    /*         local  variables end       */
-                    PUTU32(YiP.c + 12, ctr_in); // initial
-                    // printf("p(%d)\n",omp_parallel_num);
-                    int length = len;
-                    length -= (16 * omp_parallel_num); // if detected the data block has allocated enough processors then it would get in the loop below
-                    // printf("length in p(%d):%d\n",omp_parallel_num,length);
-                    while (length >= 16)
-                    {
-                        // printf("p(%d)\n",omp_parallel_num);
-                        size_t *out_t_t = (size_t *)out_t;
-                        size_t *in_t_t = (const size_t *)in_t;
-                        sm4_expand_encrypt(ctx->Yi.c, ctx->EKi.c, ctx->ks);
-                        // dump_hex(EkiP.c,16);
-                        //  ctr_in +=GCM_PARALLEL;
-                        ctr_in += parallell;
-                        PUTU32(YiP.c + 12, ctr_in);
-                        for (int q = 0; q < 16 / sizeof(size_t); ++q)
-                        {
-                            out_t_t[q] = in_t_t[q] ^ EkiP.t[q];
-                        }
-                        // printf("P(%d) \n",omp_parallel_num);
-                        //  in_t+=(16 *GCM_PARALLEL);
-
-                        // out_t+=(16 *GCM_PARALLEL);
-                        // length-=(16 *GCM_PARALLEL);
-                        in_t += (16 * parallell);
-
-                        out_t += (16 * parallell);
-                        length -= (16 * parallell);
-                    }
-                }
-                while (len >= 16)
-                { // process of GMUL
-                    size_t *out_t = (size_t *)out;
-                    const size_t *in_t = (const size_t *)in;
-                    for (i = 0; i < 16 / sizeof(size_t); ++i)
-                        ctx->Xi.t[i] ^= out_t[i];           // Xi saves the tag
-                    gcm_gmult_4bit(ctx->Xi.u, ctx->Htable); // galois multiply of H and Y
-                    // GCM_MUL(ctx, Xi);//starting GHASH
-                    out += 16;
-                    in += 16;
-                    len -= 16; // end GHASH
-                }
+                gcm_gmult_4bit(ctx->Xi.u, ctx->Htable); // multiply of H and Y
+                // GCM_MUL(ctx, Xi);//starting GHASH
+                out += 16;
+                in += 16;
+                len -= 16; // end GHASH
             }
-#else
-            {
-                while (len >= 16)
-                {
-                    size_t *out_t = (size_t *)out;
-                    const size_t *in_t = (const size_t *)in;
-                    sm4_expand_encrypt(ctx->Yi.c, ctx->EKi.c, ctx->ks);
-
-                    ++ctr;
-                    if (is_endian.little)
-                        PUTU32(ctx->Yi.c + 12, ctr);
-                    else
-                        ctx->Yi.d[3] = ctr;
-                    for (i = 0; i < 16 / sizeof(size_t); ++i)
-                        ctx->Xi.t[i] ^= out_t[i] = in_t[i] ^ ctx->EKi.t[i]; // Xi saves the cyphertext
-
-                    gcm_gmult_4bit(ctx->Xi.u, ctx->Htable); // multiply of H and Y
-                    // GCM_MUL(ctx, Xi);//starting GHASH
-                    out += 16;
-                    in += 16;
-                    len -= 16; // end GHASH
-                }
-            }
-#endif
             int q = 0;
             while (len)
             {
@@ -622,7 +545,6 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
             }
             ctx->mres = n;
             return 0;
-
         } while (0);
     }
 #endif // SMALL_FOOTPRINT
@@ -708,65 +630,7 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
                     return 0;
                 }
             }
-#ifdef GCM_PARALLEL // uses parallel
-            {
-                // omp_set_num_threads(GCM_PARALLEL);
-                int parallell;
-                omp_set_num_threads(parallell);
 
-#pragma omp parallel
-                {
-                    int omp_parallel_num = omp_get_thread_num();
-                    int ctr_in = ctr + omp_parallel_num;
-
-                    union
-                    { // the variables inside each processor
-                        u64 u[2];
-                        u32 d[4];
-                        u8 c[16];
-                        size_t t[16 / sizeof(size_t)];
-                    } YiP, EkiP, XiP;
-                    YiP.u[0] = ctx->Yi.u[0];
-                    YiP.u[1] = ctx->Yi.u[1];
-                    uint8_t *out_t = out + omp_parallel_num * (16);
-                    const uint8_t *in_t = (in + omp_parallel_num * (16));
-
-                    /*         local  variables end       */
-                    PUTU32(YiP.c + 12, ctr_in); // initial
-                    int length = len;
-                    length -= (16 * omp_parallel_num); // if detected the data block has allocated enough processors then it would get in the loop below
-                    while (length >= 16)
-                    {
-                        size_t *out_t_t = (size_t *)out_t;
-                        size_t *in_t_t = (const size_t *)in_t;
-                        sm4_expand_encrypt(ctx->Yi.c, ctx->EKi.c, ctx->ks);
-                        ctr_in += parallell;
-                        PUTU32(YiP.c + 12, ctr_in);
-                        for (int q = 0; q < 16 / sizeof(size_t); ++q)
-                        {
-                            out_t_t[q] = in_t_t[q] ^ EkiP.t[q];
-                        }
-                        in_t += (16 * parallell);
-                        out_t += (16 * parallell);
-                        length -= (16 * parallell);
-                    }
-                }
-                while (len >= 16)
-                { // process of GMUL
-                    size_t *out_t = (size_t *)out;
-                    const size_t *in_t = (const size_t *)in;
-                    for (i = 0; i < 16 / sizeof(size_t); ++i)
-                    { // the only differences bewteen encryption and decryption
-                        size_t c = in_t[i];
-                        ctx->Xi.t[i] ^= c;
-                    }
-                    gcm_gmult_4bit(ctx->Xi.u, ctx->Htable); // galois multiply of H and Y
-                    out += 16;
-                    in += 16;
-                    len -= 16; // end GHASH
-                }
-            }
-#else
             while (len >= 16)
             {
                 size_t *out_t = (size_t *)out;
@@ -793,7 +657,7 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
                 in += 16;
                 len -= 16;
             }
-#endif
+
             int q = 0;
             while (len)
             {

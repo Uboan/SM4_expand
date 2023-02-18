@@ -17,7 +17,7 @@ typedef unsigned long long u64;
 # define U64(C) C##ULL
 #endif
 
-# define GCM_PARALLEL 4 //multi-process gcm 
+# define GCM_PARALLEL 8 //multi-process gcm 
 
 
 # define GETU32(p)       ((u32)(p)[0]<<24|(u32)(p)[1]<<16|(u32)(p)[2]<<8|(u32)(p)[3])

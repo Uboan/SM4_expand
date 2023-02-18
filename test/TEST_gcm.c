@@ -158,7 +158,6 @@ int correctness_test(int num, int *s, int k) //正确性测试
 	uint8_t Ciphertext[num][s[k]], deCiphertext[num][s[k]];//密文与解密文
 
 	GCM128_CONTEXT* ctx = (GCM128_CONTEXT*)malloc(sizeof(GCM128_CONTEXT));
-	
 	for(i = 0; i < num; i++)
 	{
 		gcm128_init(ctx, KEY128); //生成 轮密钥与轮哈希密钥
@@ -185,9 +184,7 @@ int main()
 	{
 		if(correctness_test(num, s, i))
 			printf("----Correctness Test----\n for %d len,and for %d plaintexts passed!\n\n",s[i],num);
-
 	}
-	
 	maintest();
 	return 0;
 }
