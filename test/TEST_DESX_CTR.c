@@ -117,9 +117,11 @@ int maintest(int block){
 	//
 	 * */
 		double time_used = (finish_crypt_time - start_crypt_time);
-		printf("doing %s for 3s on %d size blocks %lld in %.2fs\n",cypher_name[cypher-1],amount,i,time_used);
-		printf("Mbps :%dMbps \n",i*amount/3/1000000);
-
+		// printf("doing %s for 3s on %d size blocks %lld in %.2fs\n",cypher_name[cypher-1],amount,i,time_used);
+		// printf("Mbps :%dMbps \n",i*amount/3/1000000);
+		// printf("kbyte/s :%.2f \n",i*amount/time_used/1024);
+		printf("%lld ",i);
+		printf("%.2f \n",i*amount/time_used/1024);
 			starttime = start_rdtsc();
 		for(i=0;i<TEST;i++){
 			
@@ -132,7 +134,7 @@ int maintest(int block){
 		}
 			endtime = end_rdtsc();
 			ans = endtime - starttime;
-		printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n",cypher_name[cypher-1],amount,ans/TEST/amount);
+		//printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n",cypher_name[cypher-1],amount,ans/TEST/amount);
 		
 			
 			

@@ -2,6 +2,7 @@
     "files.associations": {
         "sm4_expand.h": "c",
         "sm4.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "stdlib.h": "c"
     }
 }

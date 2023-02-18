@@ -1,1 +1,0 @@
-/usr/bin/cc  -std=c99 -O2 -fopenmp -rdynamic CMakeFiles/TSM4EXPAND.dir/test/test_sm4_expand.c.o -o TSM4EXPAND  libLIB.a -O2 

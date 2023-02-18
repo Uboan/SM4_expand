@@ -2,7 +2,7 @@
 #include "string.h"
 #include <omp.h>
 #define ossl_inline inline
-#define CTR_PARALLEL 4
+#define CTR_PARALLEL 6
 static ossl_inline uint64_t load_64_be(const uint8_t*b,uint32_t n){//load n_th elements of 64 block in b array to become  a real uint64_t
 	return ((uint64_t)b[8*n]<<56)|
 		   ((uint64_t)b[8*n+1]<<48)|

@@ -1,5 +1,6 @@
 #include "sm4.h"
 #include <stdlib.h>
+#include "sm4_expand.h"
 typedef struct SM4_3des_KEY_st{
 	SM4_KEY *KEY[2];
 	}SM4_3des_KEY;

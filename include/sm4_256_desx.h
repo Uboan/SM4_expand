@@ -3,7 +3,7 @@
 #include "sm4.h"
 #include <stdint.h>
 #include <stdlib.h>
-
+#include "sm4_expand.h"
 #define block_size 16
 
 int sm4_256_set_key_desx(const uint8_t *key,SM4_KEY *ks);

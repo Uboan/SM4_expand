@@ -3,7 +3,7 @@
 #include "sm4_256_desx.h"
 #include <omp.h>
 #define ossl_inline inline
-#define CTR_PARALLEL 4
+#define CTR_PARALLEL 6
 int sm4_256_set_key_desx(const uint8_t *key,SM4_KEY *ks){
 	
 	return ossl_sm4_set_key(key,ks);
@@ -105,35 +105,73 @@ void sm4_desx_ctr_set_counter(unsigned char *counter,int set_num){
 
     void sm4_desx_ctr_encrypt(const char *in, char *out, int len, const void *key, SM4_KEY *ks, unsigned char ivec[16], unsigned char ecount_buf[16], unsigned int num, int Cypher)
     {
-		unsigned int n;
-		int l=0;
-		n = num;
-		while(len>=16){
-					sm4_256_encrypt_desx(ivec,ecount_buf,key,ks);
+		    unsigned int n;
+		#ifdef CTR_PARALLEL
+		{
+			omp_set_num_threads(CTR_PARALLEL);
+			#pragma omp parallel
+			{
+			int parallell =CTR_PARALLEL;
+			int omp_id = omp_get_thread_num();
+			int length = len;
+			length -= (16 * omp_id); // if detected the data block has allocated enough processors then it would get in the loop below
+			unsigned char iv_p[16];
+			unsigned char ecount_buf_p[32];
+			uint8_t *out_t = out + omp_id * (16);
+			const uint8_t *in_t = (in + omp_id * (16));
+
+			int ind = 0;
+			
+			/* initialization of variables */
+			for (int i = 0; i < 16; i++)
+				iv_p[i] = ivec[16];
+			ctr128_inc_nstep(iv_p, omp_id);
+			while (length >= 16)
+			{             
+				sm4_256_encrypt_desx(ivec,ecount_buf,key,ks);
+				ctr128_inc_nstep(iv_p, parallell);
+				for (ind = 0; ind < 16; ind++)
+					out_t[ind] = in_t[ind] ^ ecount_buf_p[n];
+				length -= 16 * parallell;
+				out_t += 16 * parallell;
+				in_t += 16 * parallell;
+				ind = 0;
+			}
 					
-					//dump_hex(ivec,16);
-					sm4_desx_ctr_inc(ivec);
-					
-					//dump_hex(ecount_buf,16);
-					for(n=0;n<16;n++)
-						out[n] = in[n]^ecount_buf[n];
-					//dump_hex(ecount_buf,32);
-					len-=16;
-					out+=16;
-					in+=16;
-					n=0;
-					
-					
-				}	
-		
-		num = n;
+				
+			}
+		}
+
+		#else
+		{  
+			
+			int l=0;
+			n = num;
+			while(len>=16){
+						sm4_256_encrypt_desx(ivec,ecount_buf,key,ks);
+						//dump_hex(ivec,16);
+						ctr128_inc(ivec);
+						
+						//dump_hex(ecount_buf,16);
+						for(n=0;n<16;n++)
+							out[n] = in[n]^ecount_buf[n];
+						//dump_hex(ecount_buf,32);
+						len-=16;
+						out+=16;
+						in+=16;
+						n=0;
+					}	
+					num = n;	
+		}
+		#endif
+	
 		return;
     }
 
 
     void sm4_desx_cbc_encrypt(uint8_t *in, uint8_t *out, uint8_t *ivec, size_t len, const void *key,SM4_KEY *ks)
     {
-		 size_t n; 
+		size_t n; 
 		uint8_t * out1 = out;
 		unsigned char plbuf[16];//输入缓存
 		unsigned char ivbuf[16];//异或变量缓存

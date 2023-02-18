@@ -71,7 +71,8 @@ int main(){
 
  	printf("doing  for 3s on %d size blocks %lld in %.2fs\t",amount,i,(double)(finish_crypt_time - start_crypt_time));
 	 	printf("%.2fMbps\n",(double)(i*amount/1000000));//million bit
-	
+		printf("kbyte/s :%.2f \n",i*amount/(double)(finish_crypt_time - start_crypt_time)/1024);
+
 		
 	 	starttime = start_rdtsc();
 	 	for(i=0;i<TEST;i++){
