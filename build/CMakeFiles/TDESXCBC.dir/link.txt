@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=c99 -O2 -fopenmp -rdynamic CMakeFiles/TDESXCBC.dir/test/TEST_DESX_CBC.c.o -o TDESXCBC  libLIB.a -O2 

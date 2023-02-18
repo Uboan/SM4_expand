@@ -50,11 +50,11 @@ int main(){
 	sm4_expand_cbc_decrypt(out,out1,ivec1,32,ks);
 	dump_hex(out1,32);
 	 init_test_data(plaintext,1048577);
-	 for(amount=16;amount<=1048576;amount*=4){
+	for(amount=16;amount<=1048576;amount*=4){
 		
 	
 		
-		
+		//amount=8192;
 	 	uint64_t i=0;
 	
 	 	time_t endwait = time(NULL) + 3,finish_crypt_time,start_crypt_time;

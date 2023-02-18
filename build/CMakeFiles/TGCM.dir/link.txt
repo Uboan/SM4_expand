@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=c99 -O2 -fopenmp -rdynamic CMakeFiles/TGCM.dir/test/TEST_gcm.c.o -o TGCM  libLIB.a -O2 

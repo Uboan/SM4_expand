@@ -20,10 +20,17 @@ add_executable(TGCM test/TEST_gcm.c)
 add_executable(TCTR test/TEST_ctr.c)
 add_executable(TSM4CBC test/test_sm4_cbc.c)
 add_executable(TSM4EXPAND test/test_sm4_expand.c)
-
+add_executable(T3DESCTR test/TEST_3DES_CTR.c)
+add_executable(T3DESCBC test/TEST_3DES_CBC.c)
+add_executable(TDESXCTR test/TEST_DESX_CTR.c)
+add_executable(TDESXCBC test/TEST_DESX_CBC.c)
 
 target_link_libraries(TGCM LIB "-O2")
 target_link_libraries(TCTR LIB "-O2" )
 target_link_libraries(TSM4CBC LIB "-O2")
 target_link_libraries(TSM4EXPAND LIB "-O2")
+target_link_libraries(T3DESCTR LIB "-O2")
+target_link_libraries(T3DESCBC LIB "-O2")
+target_link_libraries(TDESXCTR LIB "-O2")
+target_link_libraries(TDESXCBC LIB "-O2")
 

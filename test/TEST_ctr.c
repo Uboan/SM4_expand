@@ -91,7 +91,8 @@ int maintest(int block){
 		
 	for(amount=16;amount<1048576;amount*=4){
 		
-		
+
+		//amount = 8192;
 		unsigned long long int i=0;
 		
 	
