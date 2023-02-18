@@ -97,10 +97,24 @@ CMakeFiles/LIB.dir/src/gcm_sm4_256.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/LIB.dir/src/gcm_sm4_256.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/kaye/SM4_expand/src/gcm_sm4_256.c -o CMakeFiles/LIB.dir/src/gcm_sm4_256.c.s
 
+CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o: CMakeFiles/LIB.dir/flags.make
+CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o: /home/kaye/SM4_expand/src/gcm_sm4_256_1.c
+CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o: CMakeFiles/LIB.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o -MF CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o.d -o CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o -c /home/kaye/SM4_expand/src/gcm_sm4_256_1.c
+
+CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/kaye/SM4_expand/src/gcm_sm4_256_1.c > CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.i
+
+CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/kaye/SM4_expand/src/gcm_sm4_256_1.c -o CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.s
+
 CMakeFiles/LIB.dir/src/pksc7_padding.c.o: CMakeFiles/LIB.dir/flags.make
 CMakeFiles/LIB.dir/src/pksc7_padding.c.o: /home/kaye/SM4_expand/src/pksc7_padding.c
 CMakeFiles/LIB.dir/src/pksc7_padding.c.o: CMakeFiles/LIB.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/LIB.dir/src/pksc7_padding.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/LIB.dir/src/pksc7_padding.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LIB.dir/src/pksc7_padding.c.o -MF CMakeFiles/LIB.dir/src/pksc7_padding.c.o.d -o CMakeFiles/LIB.dir/src/pksc7_padding.c.o -c /home/kaye/SM4_expand/src/pksc7_padding.c
 
 CMakeFiles/LIB.dir/src/pksc7_padding.c.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/LIB.dir/src/pksc7_padding.c.s: cmake_force
 CMakeFiles/LIB.dir/src/sm4.c.o: CMakeFiles/LIB.dir/flags.make
 CMakeFiles/LIB.dir/src/sm4.c.o: /home/kaye/SM4_expand/src/sm4.c
 CMakeFiles/LIB.dir/src/sm4.c.o: CMakeFiles/LIB.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/LIB.dir/src/sm4.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/LIB.dir/src/sm4.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LIB.dir/src/sm4.c.o -MF CMakeFiles/LIB.dir/src/sm4.c.o.d -o CMakeFiles/LIB.dir/src/sm4.c.o -c /home/kaye/SM4_expand/src/sm4.c
 
 CMakeFiles/LIB.dir/src/sm4.c.i: cmake_force
@@ -128,7 +142,7 @@ CMakeFiles/LIB.dir/src/sm4.c.s: cmake_force
 CMakeFiles/LIB.dir/src/sm4_256_3des.c.o: CMakeFiles/LIB.dir/flags.make
 CMakeFiles/LIB.dir/src/sm4_256_3des.c.o: /home/kaye/SM4_expand/src/sm4_256_3des.c
 CMakeFiles/LIB.dir/src/sm4_256_3des.c.o: CMakeFiles/LIB.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/LIB.dir/src/sm4_256_3des.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/LIB.dir/src/sm4_256_3des.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LIB.dir/src/sm4_256_3des.c.o -MF CMakeFiles/LIB.dir/src/sm4_256_3des.c.o.d -o CMakeFiles/LIB.dir/src/sm4_256_3des.c.o -c /home/kaye/SM4_expand/src/sm4_256_3des.c
 
 CMakeFiles/LIB.dir/src/sm4_256_3des.c.i: cmake_force
@@ -142,7 +156,7 @@ CMakeFiles/LIB.dir/src/sm4_256_3des.c.s: cmake_force
 CMakeFiles/LIB.dir/src/sm4_256_desx.c.o: CMakeFiles/LIB.dir/flags.make
 CMakeFiles/LIB.dir/src/sm4_256_desx.c.o: /home/kaye/SM4_expand/src/sm4_256_desx.c
 CMakeFiles/LIB.dir/src/sm4_256_desx.c.o: CMakeFiles/LIB.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/LIB.dir/src/sm4_256_desx.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/LIB.dir/src/sm4_256_desx.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LIB.dir/src/sm4_256_desx.c.o -MF CMakeFiles/LIB.dir/src/sm4_256_desx.c.o.d -o CMakeFiles/LIB.dir/src/sm4_256_desx.c.o -c /home/kaye/SM4_expand/src/sm4_256_desx.c
 
 CMakeFiles/LIB.dir/src/sm4_256_desx.c.i: cmake_force
@@ -156,7 +170,7 @@ CMakeFiles/LIB.dir/src/sm4_256_desx.c.s: cmake_force
 CMakeFiles/LIB.dir/src/sm4_256_expand.c.o: CMakeFiles/LIB.dir/flags.make
 CMakeFiles/LIB.dir/src/sm4_256_expand.c.o: /home/kaye/SM4_expand/src/sm4_256_expand.c
 CMakeFiles/LIB.dir/src/sm4_256_expand.c.o: CMakeFiles/LIB.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/LIB.dir/src/sm4_256_expand.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/LIB.dir/src/sm4_256_expand.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LIB.dir/src/sm4_256_expand.c.o -MF CMakeFiles/LIB.dir/src/sm4_256_expand.c.o.d -o CMakeFiles/LIB.dir/src/sm4_256_expand.c.o -c /home/kaye/SM4_expand/src/sm4_256_expand.c
 
 CMakeFiles/LIB.dir/src/sm4_256_expand.c.i: cmake_force
@@ -170,7 +184,7 @@ CMakeFiles/LIB.dir/src/sm4_256_expand.c.s: cmake_force
 CMakeFiles/LIB.dir/src/sm4_cbc.c.o: CMakeFiles/LIB.dir/flags.make
 CMakeFiles/LIB.dir/src/sm4_cbc.c.o: /home/kaye/SM4_expand/src/sm4_cbc.c
 CMakeFiles/LIB.dir/src/sm4_cbc.c.o: CMakeFiles/LIB.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/LIB.dir/src/sm4_cbc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/LIB.dir/src/sm4_cbc.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LIB.dir/src/sm4_cbc.c.o -MF CMakeFiles/LIB.dir/src/sm4_cbc.c.o.d -o CMakeFiles/LIB.dir/src/sm4_cbc.c.o -c /home/kaye/SM4_expand/src/sm4_cbc.c
 
 CMakeFiles/LIB.dir/src/sm4_cbc.c.i: cmake_force
@@ -184,7 +198,7 @@ CMakeFiles/LIB.dir/src/sm4_cbc.c.s: cmake_force
 CMakeFiles/LIB.dir/src/util.c.o: CMakeFiles/LIB.dir/flags.make
 CMakeFiles/LIB.dir/src/util.c.o: /home/kaye/SM4_expand/src/util.c
 CMakeFiles/LIB.dir/src/util.c.o: CMakeFiles/LIB.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/LIB.dir/src/util.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/LIB.dir/src/util.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LIB.dir/src/util.c.o -MF CMakeFiles/LIB.dir/src/util.c.o.d -o CMakeFiles/LIB.dir/src/util.c.o -c /home/kaye/SM4_expand/src/util.c
 
 CMakeFiles/LIB.dir/src/util.c.i: cmake_force
@@ -199,6 +213,7 @@ CMakeFiles/LIB.dir/src/util.c.s: cmake_force
 LIB_OBJECTS = \
 "CMakeFiles/LIB.dir/src/ctr_sm4_256.c.o" \
 "CMakeFiles/LIB.dir/src/gcm_sm4_256.c.o" \
+"CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o" \
 "CMakeFiles/LIB.dir/src/pksc7_padding.c.o" \
 "CMakeFiles/LIB.dir/src/sm4.c.o" \
 "CMakeFiles/LIB.dir/src/sm4_256_3des.c.o" \
@@ -212,6 +227,7 @@ LIB_EXTERNAL_OBJECTS =
 
 libLIB.a: CMakeFiles/LIB.dir/src/ctr_sm4_256.c.o
 libLIB.a: CMakeFiles/LIB.dir/src/gcm_sm4_256.c.o
+libLIB.a: CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o
 libLIB.a: CMakeFiles/LIB.dir/src/pksc7_padding.c.o
 libLIB.a: CMakeFiles/LIB.dir/src/sm4.c.o
 libLIB.a: CMakeFiles/LIB.dir/src/sm4_256_3des.c.o
@@ -221,7 +237,7 @@ libLIB.a: CMakeFiles/LIB.dir/src/sm4_cbc.c.o
 libLIB.a: CMakeFiles/LIB.dir/src/util.c.o
 libLIB.a: CMakeFiles/LIB.dir/build.make
 libLIB.a: CMakeFiles/LIB.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking C static library libLIB.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kaye/SM4_expand/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking C static library libLIB.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/LIB.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/LIB.dir/link.txt --verbose=$(VERBOSE)
 

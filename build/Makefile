@@ -181,6 +181,58 @@ TSM4EXPAND/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TSM4EXPAND.dir/build.make CMakeFiles/TSM4EXPAND.dir/build
 .PHONY : TSM4EXPAND/fast
 
+#=============================================================================
+# Target rules for targets named T3DESCTR
+
+# Build rule for target.
+T3DESCTR: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 T3DESCTR
+.PHONY : T3DESCTR
+
+# fast build rule for target.
+T3DESCTR/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/T3DESCTR.dir/build.make CMakeFiles/T3DESCTR.dir/build
+.PHONY : T3DESCTR/fast
+
+#=============================================================================
+# Target rules for targets named T3DESCBC
+
+# Build rule for target.
+T3DESCBC: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 T3DESCBC
+.PHONY : T3DESCBC
+
+# fast build rule for target.
+T3DESCBC/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/T3DESCBC.dir/build.make CMakeFiles/T3DESCBC.dir/build
+.PHONY : T3DESCBC/fast
+
+#=============================================================================
+# Target rules for targets named TDESXCTR
+
+# Build rule for target.
+TDESXCTR: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 TDESXCTR
+.PHONY : TDESXCTR
+
+# fast build rule for target.
+TDESXCTR/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TDESXCTR.dir/build.make CMakeFiles/TDESXCTR.dir/build
+.PHONY : TDESXCTR/fast
+
+#=============================================================================
+# Target rules for targets named TDESXCBC
+
+# Build rule for target.
+TDESXCBC: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 TDESXCBC
+.PHONY : TDESXCBC
+
+# fast build rule for target.
+TDESXCBC/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TDESXCBC.dir/build.make CMakeFiles/TDESXCBC.dir/build
+.PHONY : TDESXCBC/fast
+
 src/ctr_sm4_256.o: src/ctr_sm4_256.c.o
 .PHONY : src/ctr_sm4_256.o
 
@@ -228,6 +280,30 @@ src/gcm_sm4_256.s: src/gcm_sm4_256.c.s
 src/gcm_sm4_256.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LIB.dir/build.make CMakeFiles/LIB.dir/src/gcm_sm4_256.c.s
 .PHONY : src/gcm_sm4_256.c.s
+
+src/gcm_sm4_256_1.o: src/gcm_sm4_256_1.c.o
+.PHONY : src/gcm_sm4_256_1.o
+
+# target to build an object file
+src/gcm_sm4_256_1.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LIB.dir/build.make CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o
+.PHONY : src/gcm_sm4_256_1.c.o
+
+src/gcm_sm4_256_1.i: src/gcm_sm4_256_1.c.i
+.PHONY : src/gcm_sm4_256_1.i
+
+# target to preprocess a source file
+src/gcm_sm4_256_1.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LIB.dir/build.make CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.i
+.PHONY : src/gcm_sm4_256_1.c.i
+
+src/gcm_sm4_256_1.s: src/gcm_sm4_256_1.c.s
+.PHONY : src/gcm_sm4_256_1.s
+
+# target to generate assembly for a file
+src/gcm_sm4_256_1.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LIB.dir/build.make CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.s
+.PHONY : src/gcm_sm4_256_1.c.s
 
 src/pksc7_padding.o: src/pksc7_padding.c.o
 .PHONY : src/pksc7_padding.o
@@ -397,6 +473,102 @@ src/util.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LIB.dir/build.make CMakeFiles/LIB.dir/src/util.c.s
 .PHONY : src/util.c.s
 
+test/TEST_3DES_CBC.o: test/TEST_3DES_CBC.c.o
+.PHONY : test/TEST_3DES_CBC.o
+
+# target to build an object file
+test/TEST_3DES_CBC.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/T3DESCBC.dir/build.make CMakeFiles/T3DESCBC.dir/test/TEST_3DES_CBC.c.o
+.PHONY : test/TEST_3DES_CBC.c.o
+
+test/TEST_3DES_CBC.i: test/TEST_3DES_CBC.c.i
+.PHONY : test/TEST_3DES_CBC.i
+
+# target to preprocess a source file
+test/TEST_3DES_CBC.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/T3DESCBC.dir/build.make CMakeFiles/T3DESCBC.dir/test/TEST_3DES_CBC.c.i
+.PHONY : test/TEST_3DES_CBC.c.i
+
+test/TEST_3DES_CBC.s: test/TEST_3DES_CBC.c.s
+.PHONY : test/TEST_3DES_CBC.s
+
+# target to generate assembly for a file
+test/TEST_3DES_CBC.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/T3DESCBC.dir/build.make CMakeFiles/T3DESCBC.dir/test/TEST_3DES_CBC.c.s
+.PHONY : test/TEST_3DES_CBC.c.s
+
+test/TEST_3DES_CTR.o: test/TEST_3DES_CTR.c.o
+.PHONY : test/TEST_3DES_CTR.o
+
+# target to build an object file
+test/TEST_3DES_CTR.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/T3DESCTR.dir/build.make CMakeFiles/T3DESCTR.dir/test/TEST_3DES_CTR.c.o
+.PHONY : test/TEST_3DES_CTR.c.o
+
+test/TEST_3DES_CTR.i: test/TEST_3DES_CTR.c.i
+.PHONY : test/TEST_3DES_CTR.i
+
+# target to preprocess a source file
+test/TEST_3DES_CTR.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/T3DESCTR.dir/build.make CMakeFiles/T3DESCTR.dir/test/TEST_3DES_CTR.c.i
+.PHONY : test/TEST_3DES_CTR.c.i
+
+test/TEST_3DES_CTR.s: test/TEST_3DES_CTR.c.s
+.PHONY : test/TEST_3DES_CTR.s
+
+# target to generate assembly for a file
+test/TEST_3DES_CTR.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/T3DESCTR.dir/build.make CMakeFiles/T3DESCTR.dir/test/TEST_3DES_CTR.c.s
+.PHONY : test/TEST_3DES_CTR.c.s
+
+test/TEST_DESX_CBC.o: test/TEST_DESX_CBC.c.o
+.PHONY : test/TEST_DESX_CBC.o
+
+# target to build an object file
+test/TEST_DESX_CBC.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TDESXCBC.dir/build.make CMakeFiles/TDESXCBC.dir/test/TEST_DESX_CBC.c.o
+.PHONY : test/TEST_DESX_CBC.c.o
+
+test/TEST_DESX_CBC.i: test/TEST_DESX_CBC.c.i
+.PHONY : test/TEST_DESX_CBC.i
+
+# target to preprocess a source file
+test/TEST_DESX_CBC.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TDESXCBC.dir/build.make CMakeFiles/TDESXCBC.dir/test/TEST_DESX_CBC.c.i
+.PHONY : test/TEST_DESX_CBC.c.i
+
+test/TEST_DESX_CBC.s: test/TEST_DESX_CBC.c.s
+.PHONY : test/TEST_DESX_CBC.s
+
+# target to generate assembly for a file
+test/TEST_DESX_CBC.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TDESXCBC.dir/build.make CMakeFiles/TDESXCBC.dir/test/TEST_DESX_CBC.c.s
+.PHONY : test/TEST_DESX_CBC.c.s
+
+test/TEST_DESX_CTR.o: test/TEST_DESX_CTR.c.o
+.PHONY : test/TEST_DESX_CTR.o
+
+# target to build an object file
+test/TEST_DESX_CTR.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TDESXCTR.dir/build.make CMakeFiles/TDESXCTR.dir/test/TEST_DESX_CTR.c.o
+.PHONY : test/TEST_DESX_CTR.c.o
+
+test/TEST_DESX_CTR.i: test/TEST_DESX_CTR.c.i
+.PHONY : test/TEST_DESX_CTR.i
+
+# target to preprocess a source file
+test/TEST_DESX_CTR.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TDESXCTR.dir/build.make CMakeFiles/TDESXCTR.dir/test/TEST_DESX_CTR.c.i
+.PHONY : test/TEST_DESX_CTR.c.i
+
+test/TEST_DESX_CTR.s: test/TEST_DESX_CTR.c.s
+.PHONY : test/TEST_DESX_CTR.s
+
+# target to generate assembly for a file
+test/TEST_DESX_CTR.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TDESXCTR.dir/build.make CMakeFiles/TDESXCTR.dir/test/TEST_DESX_CTR.c.s
+.PHONY : test/TEST_DESX_CTR.c.s
+
 test/TEST_ctr.o: test/TEST_ctr.c.o
 .PHONY : test/TEST_ctr.o
 
@@ -502,7 +674,11 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... LIB"
+	@echo "... T3DESCBC"
+	@echo "... T3DESCTR"
 	@echo "... TCTR"
+	@echo "... TDESXCBC"
+	@echo "... TDESXCTR"
 	@echo "... TGCM"
 	@echo "... TSM4CBC"
 	@echo "... TSM4EXPAND"
@@ -512,6 +688,9 @@ help:
 	@echo "... src/gcm_sm4_256.o"
 	@echo "... src/gcm_sm4_256.i"
 	@echo "... src/gcm_sm4_256.s"
+	@echo "... src/gcm_sm4_256_1.o"
+	@echo "... src/gcm_sm4_256_1.i"
+	@echo "... src/gcm_sm4_256_1.s"
 	@echo "... src/pksc7_padding.o"
 	@echo "... src/pksc7_padding.i"
 	@echo "... src/pksc7_padding.s"
@@ -533,6 +712,18 @@ help:
 	@echo "... src/util.o"
 	@echo "... src/util.i"
 	@echo "... src/util.s"
+	@echo "... test/TEST_3DES_CBC.o"
+	@echo "... test/TEST_3DES_CBC.i"
+	@echo "... test/TEST_3DES_CBC.s"
+	@echo "... test/TEST_3DES_CTR.o"
+	@echo "... test/TEST_3DES_CTR.i"
+	@echo "... test/TEST_3DES_CTR.s"
+	@echo "... test/TEST_DESX_CBC.o"
+	@echo "... test/TEST_DESX_CBC.i"
+	@echo "... test/TEST_DESX_CBC.s"
+	@echo "... test/TEST_DESX_CTR.o"
+	@echo "... test/TEST_DESX_CTR.i"
+	@echo "... test/TEST_DESX_CTR.s"
 	@echo "... test/TEST_ctr.o"
 	@echo "... test/TEST_ctr.i"
 	@echo "... test/TEST_ctr.s"

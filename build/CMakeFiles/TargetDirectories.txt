@@ -3,5 +3,9 @@
 /home/kaye/SM4_expand/build/CMakeFiles/TCTR.dir
 /home/kaye/SM4_expand/build/CMakeFiles/TSM4CBC.dir
 /home/kaye/SM4_expand/build/CMakeFiles/TSM4EXPAND.dir
+/home/kaye/SM4_expand/build/CMakeFiles/T3DESCTR.dir
+/home/kaye/SM4_expand/build/CMakeFiles/T3DESCBC.dir
+/home/kaye/SM4_expand/build/CMakeFiles/TDESXCTR.dir
+/home/kaye/SM4_expand/build/CMakeFiles/TDESXCBC.dir
 /home/kaye/SM4_expand/build/CMakeFiles/edit_cache.dir
 /home/kaye/SM4_expand/build/CMakeFiles/rebuild_cache.dir

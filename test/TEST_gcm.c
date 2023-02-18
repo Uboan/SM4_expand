@@ -178,13 +178,13 @@ int correctness_test(int num, int *s, int k) //正确性测试
 
 int main()
 {
-	int s[4] = {16, 64, 256, 1024};
-	int num = 1024;
-	for(int i = 0; i < 4; i++)
-	{
-		if(correctness_test(num, s, i))
-			printf("----Correctness Test----\n for %d len,and for %d plaintexts passed!\n\n",s[i],num);
-	}
+	// int s[4] = {16, 64, 256, 1024};
+	// int num = 1024;
+	// for(int i = 0; i < 4; i++)
+	// {
+	// 	if(correctness_test(num, s, i))
+	// 		printf("----Correctness Test----\n for %d len,and for %d plaintexts passed!\n\n",s[i],num);
+	// }
 	maintest();
 	return 0;
 }

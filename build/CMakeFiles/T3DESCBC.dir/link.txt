@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=c99 -O2 -fopenmp -rdynamic CMakeFiles/T3DESCBC.dir/test/TEST_3DES_CBC.c.o -o T3DESCBC  libLIB.a -O2 

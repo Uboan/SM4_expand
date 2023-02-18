@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/LIB.dir/src/ctr_sm4_256.c.o.d"
   "CMakeFiles/LIB.dir/src/gcm_sm4_256.c.o"
   "CMakeFiles/LIB.dir/src/gcm_sm4_256.c.o.d"
+  "CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o"
+  "CMakeFiles/LIB.dir/src/gcm_sm4_256_1.c.o.d"
   "CMakeFiles/LIB.dir/src/pksc7_padding.c.o"
   "CMakeFiles/LIB.dir/src/pksc7_padding.c.o.d"
   "CMakeFiles/LIB.dir/src/sm4.c.o"
