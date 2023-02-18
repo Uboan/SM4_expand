@@ -1,7 +1,14 @@
 {
     "files.associations": {
         "sm4_expand.h": "c",
+<<<<<<< HEAD
         "sm4.h": "c"
     },
     "cmake.configureOnOpen": true
+=======
+        "sm4.h": "c",
+        "stdint.h": "c",
+        "stdlib.h": "c"
+    }
+>>>>>>> 5d24fced61cfea256748b9bbc9d5e56e6843ccbb
 }

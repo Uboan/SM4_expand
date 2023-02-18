@@ -158,7 +158,7 @@ int sm4_expand_set_key(const uint8_t *key, SM4_EXPAND_KEY *ks)
     uint32_t K[8];
     int i;
     int k_index;
-
+    //把主密钥256比特分成8份
     K[0] = load_u32_be(key, 0) ^ FK[0];
     K[1] = load_u32_be(key, 1) ^ FK[1];
     K[2] = load_u32_be(key, 2) ^ FK[2];

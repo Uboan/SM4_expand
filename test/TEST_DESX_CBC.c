@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdint.h>
 #include<stdlib.h>
-#include "sm4_cbc.h"
+#include "sm4_256_desx.h"
 #include "util.h"
 #include <time.h>
 #define TEST 10000
@@ -38,19 +38,19 @@ int main(){
     uint8_t ivec1[16] = {
           0x17,0x18,0x22,0x55,0x89,0x03,0x65,0x4a,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
      };
-     SM4_EXPAND_KEY *ks = (SM4_EXPAND_KEY*)malloc(sizeof(SM4_EXPAND_KEY));
+     SM4_KEY *ks = (SM4_KEY*)malloc(sizeof(SM4_KEY));
      uint64_t starttime,endtime,amount,ans;
      
-    sm4_expand_cbc_set_key(key1,ks);
-	dump_hex(input,32);
-	printf("\n");
-	sm4_expand_cbc_encrypt(input,out,ivec,32,ks);
-	dump_hex(out,32);
-	printf("\n");
-	sm4_expand_cbc_decrypt(out,out1,ivec1,32,ks);
-	dump_hex(out1,32);
-	 init_test_data(plaintext,1048577);
-	for(amount=16;amount<=1048576;amount*=4){
+    sm4_256_set_key_desx(key1,ks);
+	// dump_hex(input,32);
+	// printf("\n");
+	// sm4_expand_cbc_encrypt(input,out,ivec,32,ks);
+	// dump_hex(out,32);
+	// printf("\n");
+	// sm4_expand_cbc_decrypt(out,out1,ivec1,32,ks);
+	// dump_hex(out1,32);
+	init_test_data(plaintext,1048577);
+	for(amount=16;amount<=16384;amount*=4){
 		
 	
 		
@@ -65,17 +65,18 @@ int main(){
 	 	{
 	 		i++;
 			 
-	 		sm4_expand_cbc_decrypt(input,output,ivec,amount,ks);
+	 		sm4_desx_cbc_decrypt(input,output,ivec,amount,key1,ks);
 	 	}
 	 	finish_crypt_time = time(NULL);
 
  	printf("doing  for 3s on %d size blocks %lld in %.2fs\t",amount,i,(double)(finish_crypt_time - start_crypt_time));
 	 	printf("%.2fMbps\n",(double)(i*amount/1000000));//million bit
 		printf("kbyte/s :%.2f \n",i*amount/(double)(finish_crypt_time - start_crypt_time)/1024);
+
 		
 	 	starttime = start_rdtsc();
 	 	for(i=0;i<TEST;i++){
-	 		sm4_expand_cbc_encrypt(input,output,ivec,amount,ks);
+	 		sm4_desx_cbc_encrypt(input,output,ivec,amount,key1,ks);
 	 		}
 	 	endtime = end_rdtsc();
 	 	ans = endtime - starttime;
@@ -83,7 +84,7 @@ int main(){
 		
 	
 		
-	 }	
+	}	
 	
 
      free(ks);

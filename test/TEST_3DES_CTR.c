@@ -1,5 +1,5 @@
 #include <omp.h>
-#include "ctr_sm4_256.h"
+#include "sm4_256_3des.h"
 #include <stdint.h>
 #include "util.h"
 #include <time.h>
@@ -74,9 +74,9 @@ int maintest(int block){
 	uint8_t buf[1048576] = {'0'};
 	uint8_t out_buf[1048576];
 	uint8_t dec_buf[1048576];
-	SM4_EXPAND_KEY *ks;
-	ks = (SM4_EXPAND_KEY*)malloc(sizeof(SM4_EXPAND_KEY));
-	crypto_ctr128_setKey(key,ks);
+	SM4_3des_KEY *ks;
+	ks = (SM4_3des_KEY*)malloc(sizeof(SM4_3des_KEY));
+	sm4_256_set_key_3des(key,ks);
 	FILE *fp =NULL;
 	
 	uint64_t amount=16;
@@ -85,14 +85,14 @@ int maintest(int block){
 	init_test_data(buf,1048576);
 	//int cypher=1;//LM 
 	int cypher = block;//1 for SM4-256, 2 for SM4-128
-	char cypher_name[2][16]={"SM4-256-ctr","SM4-128-ctr"};
+	char cypher_name[2][16]={"SM4-256-3des-ctr","SM4-128-ctr"};
 	
 	
 		
-	for(amount=16;amount<1048576;amount*=4){
+	//for(amount=16;amount<1048576;amount*=4){
 		
 
-		//amount = 8192;
+		amount = 8192;
 		unsigned long long int i=0;
 		
 	
@@ -103,8 +103,8 @@ int maintest(int block){
 		while(time(NULL)<endwait)
 		{
 			i++;
-			crypto_ctr128_encrypt(buf,out_buf,amount,key,ks,iv[0],enf_buf,0,cypher);
-			ctr128_set_counter(iv[0],0);
+			sm4_3des_ctr_encrypt(buf,out_buf,amount,key,ks,iv[0],enf_buf,0,cypher);
+			sm4_3des_ctr_set_counter(iv[0],0);
 		}
 		finish_crypt_time = time(NULL);
 	/*
@@ -116,27 +116,26 @@ int maintest(int block){
 	//ans = endtime-starttime;
 	//
 	 * */
-	 double time_used = (finish_crypt_time - start_crypt_time);
-		//printf("doing %s for 3s on %d size blocks %lld in %.2fs\n",cypher_name[cypher-1],amount,i,time_used);
-		
-		//printf("Mbps :%dMbps \n",i*amount/3/1000000);
+		double time_used = (finish_crypt_time - start_crypt_time);
+		// printf("doing %s for 3s on %d size blocks %lld in %.2fs\n",cypher_name[cypher-1],amount,i,time_used);
+		// printf("Mbps :%dMbps \n",i*amount/3/1000000);
+		// printf("kbyte/s :%.2f \n",i*amount/time_used/1024);
 		printf("%lld ",i);
 		printf("%.2f \n",i*amount/time_used/1024);
+		// 	starttime = start_rdtsc();
+		// for(i=0;i<TEST;i++){
+			
+		// 	sm4_3des_ctr_encrypt(buf,out_buf,amount,key,ks,iv[0],enf_buf,0,cypher);
+		// 	sm4_3des_ctr_set_counter(iv[0],0);
+			
+			
+			
+			
+		// }
+		// 	endtime = end_rdtsc();
+		// 	ans = endtime - starttime;
+		// printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n",cypher_name[cypher-1],amount,ans/TEST/amount);
 		
-			starttime = start_rdtsc();
-		for(i=0;i<TEST;i++){
-			
-			crypto_ctr128_encrypt(buf,out_buf,amount,key,ks,iv[0],enf_buf,0,cypher);
-			ctr128_set_counter(iv[0],0);
-			
-			
-			
-			
-		}
-			endtime = end_rdtsc();
-			ans = endtime - starttime;
-		//printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n",cypher_name[cypher-1],amount,ans/TEST/amount);
-			
 			
 			
 	
@@ -144,10 +143,10 @@ int maintest(int block){
 		
 		
 		
-	}
+	//}
 	
 	
-	
+	free(ks);
 	return 0;
 	}
 	int main(){
@@ -156,5 +155,4 @@ int maintest(int block){
 		
 		return 0;
 	}
-	
 	
