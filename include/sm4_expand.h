@@ -25,8 +25,6 @@ typedef struct SM4_EXPAND_KEY_st {
 
 int sm4_expand_set_key(const uint8_t *key, SM4_EXPAND_KEY *ks);
 
-
-
 void sm4_expand_encrypt(const uint8_t *in, uint8_t *out, const SM4_EXPAND_KEY *ks);
 
 void sm4_expand_decrypt(const uint8_t *in, uint8_t *out, const SM4_EXPAND_KEY *ks);

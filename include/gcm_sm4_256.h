@@ -72,17 +72,16 @@ struct gcm128_context {
     /*
     * Relative position of Xi, H and pre-computed Htable is used in some
     * assembler modules, i.e. don't change the order!
-    * H stands for Host,
+    * Yi & Xi are used in GHASH_H(X)
     */
 #if TABLE_BITS==8
     u128 Htable[256];
 #else
     u128 Htable[16];
-   
 #endif
     unsigned int mres, ares;
     
-    void *key;
-	SM4_EXPAND_KEY *ks;
+    void *key; //mainkey
+	SM4_EXPAND_KEY *ks; //roundkey
 };
 

@@ -117,18 +117,15 @@ static void gcm_gmult_4bit(u64 Xi[2], const u128 Htable[16])
         long one;
         char little;
     } is_endian = {1};
-
-    nlo = ((const u8 *)Xi)[15];
-    printf("\n nlo = %d \n", nlo);
-    nhi = nlo >> 4;
-    nlo &= 0xf;
-
+    nlo = ((const u8 *)Xi)[15]; 
+    nhi = nlo >> 4; 
+    nlo &= 0xf; 
     Z.hi = Htable[nlo].hi;
     Z.lo = Htable[nlo].lo;
 
     while (1)
     {
-        rem = (size_t)Z.lo & 0xf;
+        rem = (size_t)Z.lo & 0xf;//后4位
         Z.lo = (Z.hi << 60) | (Z.lo >> 4);
         Z.hi = (Z.hi >> 4);
         if (sizeof(size_t) == 8)
@@ -160,7 +157,6 @@ static void gcm_gmult_4bit(u64 Xi[2], const u128 Htable[16])
 
     if (is_endian.little)
     {
-
         u8 *p = (u8 *)Xi;
         u32 v;
         v = (u32)(Z.hi >> 32);
@@ -295,13 +291,10 @@ void gcm128_init(GCM128_CONTEXT *ctx, void *key) // generate round keys and look
     } is_endian = {1};
 
     gcm_memset(ctx); //初始化
-    ctx->key = key;
+    ctx->key = key; //Mainkey -- 128bit
 
-    sm4_expand_set_key(key, ctx->ks);
-    sm4_expand_encrypt(ctx->H.c, ctx->H.c, ctx->ks);
-
-    /*should be altered to (block)(ctx->H.c,ctx->H.c,key)*/
-    //(*block) (ctx->H.c, ctx->H.c, key);
+    sm4_expand_set_key(key, ctx->ks); //get roundkey 
+    sm4_expand_encrypt(ctx->H.c, ctx->H.c, ctx->ks); //generate hash mainkey for GHASH_H
 
     if (is_endian.little)
     {
@@ -310,8 +303,8 @@ void gcm128_init(GCM128_CONTEXT *ctx, void *key) // generate round keys and look
         ctx->H.u[0] = BSWAP8(ctx->H.u[0]);
         ctx->H.u[1] = BSWAP8(ctx->H.u[1]);
 #else
-        u8 *p = ctx->H.c; // c stands for cypher text
-        u64 hi, lo;
+        u8 *p = ctx->H.c; //起始位置
+        u64 hi, lo; //计算机无法直接表示128bit数据，因此用2个64bit变量的结构表示
         hi = (u64)GETU32(p) << 32 | GETU32(p + 4);      // p[0~7]
         lo = (u64)GETU32(p + 8) << 32 | GETU32(p + 12); // p[8~15]
         ctx->H.u[0] = hi;
@@ -320,15 +313,11 @@ void gcm128_init(GCM128_CONTEXT *ctx, void *key) // generate round keys and look
     }
 
 #if TABLE_BITS == 4
-
-    gcm_init_4bit(ctx->Htable, ctx->H.u);
-    // ctx->gmult = gcm_gmult_4bits();//?
-
+    gcm_init_4bit(ctx->Htable, ctx->H.u);//from hash mainkey generate 16 hash subkey
 #endif
 }
 
-void gcm128_setiv(GCM128_CONTEXT *ctx, const unsigned char *iv,
-                  size_t len)
+void gcm128_setiv(GCM128_CONTEXT *ctx, const unsigned char *iv, size_t len)
 {
     const union
     {
@@ -337,7 +326,7 @@ void gcm128_setiv(GCM128_CONTEXT *ctx, const unsigned char *iv,
     } is_endian = {1};
     unsigned int ctr;
 
-    ctx->Yi.u[0] = 0;
+    ctx->Yi.u[0] = 0; /* IV */
     ctx->Yi.u[1] = 0;
     ctx->Xi.u[0] = 0;
     ctx->Xi.u[1] = 0;
@@ -405,8 +394,6 @@ void gcm128_setiv(GCM128_CONTEXT *ctx, const unsigned char *iv,
             ctr = ctx->Yi.d[3];
     }
     sm4_expand_encrypt(ctx->Yi.c, ctx->EK0.c, ctx->ks);
-
-    //(*ctx->block) (ctx->Yi.c, ctx->EK0.c, ctx->key);//ctx->EK0.c  to  store the encrypted iv_ctr
     ++ctr;
     if (is_endian.little)
 #ifdef BSWAP4
@@ -425,36 +412,23 @@ int gcm128_aad(GCM128_CONTEXT *ctx, const unsigned char *aad,
     unsigned int n;
     u64 alen = ctx->len.u[0]; // add length,  ctx->len.u[0] = 0
     //u64 := unsigned long long 
-
-#ifdef GCM_FUNCREF_4BIT
-    void (*gcm_gmult_p)(u64 Xi[2], const u128 Htable[16]) = ctx->gmult;
-#ifdef GHASH
-    void (*gcm_ghash_p)(u64 Xi[2], const u128 Htable[16],
-                        const u8 *inp, size_t len) = ctx->ghash;
-#endif
-#endif
-
     if (ctx->len.u[1]) // length of message == 0
         return -2;
-
     alen += len; //alen = ctx->len.u[0] + len 
     if (alen > (U64(1) << 61) || (sizeof(len) == 8 && alen < len)) // larger than anything
         return -1;
     ctx->len.u[0] = alen; //alen = len = 20
-    n = ctx->ares; // add rest??
-    //n = 0
+    n = ctx->ares; 
     if (n) 
     { // last block of the add
-        while (n && len)
-        {
+        while (n && len){
             ctx->Xi.c[n] ^= *(aad++);
             --len;
             n = (n + 1) % 16; //???
         }
         if (n == 0)
             gcm_gmult_4bit(ctx->Xi.u, ctx->Htable);
-        else
-        {
+        else{
             ctx->ares = n;
             return 0;
         }
@@ -467,28 +441,19 @@ int gcm128_aad(GCM128_CONTEXT *ctx, const unsigned char *aad,
         len -= i;
     }
 #else
-    while (len >= 16) 
-    {
-
+    while (len >= 16) {
         for (i = 0; i < 16; ++i) //aad = A(外边定义的)
             ctx->Xi.c[i] ^= aad[i]; // Xi.c stores add
-        // GCM_MUL(ctx, Xi);
-        printf("ctx->Xi.c\n");
-        for(i = 0 ; i < 16; i++)
-            printf("%d ", ctx->Xi.c[i]);
-        printf("\n");
         gcm_gmult_4bit(ctx->Xi.u, ctx->Htable);//
         aad += 16;
         len -= 16;
     }
 #endif
-    if (len)
-    {
+    if (len){
         n = (unsigned int)len; // where n changed
         for (i = 0; i < len; ++i)
             ctx->Xi.c[i] ^= aad[i];
     }
-
     ctx->ares = n;
     return 0;
 }
@@ -506,7 +471,6 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
     unsigned int n, ctr;
     size_t i;
     u64 mlen = ctx->len.u[1]; // message length
-    // WBCRYPTO_block128_f block = ctx->block;
     void *key = ctx->key;
 
     mlen += len;
@@ -515,10 +479,8 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
     ctx->len.u[1] = mlen;
 
     if (ctx->ares)
-    { // so the ctx->ares must be 0 ?
-        /* First call to encrypt finalizes GHASH(AAD) */
+    {
         gcm_gmult_4bit(ctx->Xi.u, ctx->Htable);
-        // GCM_MUL(ctx, Xi);
         ctx->ares = 0;
     }
 
@@ -532,7 +494,6 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
         ctr = ctx->Yi.d[3];
 
     n = ctx->mres;
-    // printf("mres:%d\n",ctx->mres);
 #if !defined(OPENSSL_SMALL_FOOTPRINT)
     if (16 % sizeof(size_t) == 0)
     { /* always true actually */
@@ -557,16 +518,12 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
 
             while (len >= 16)
             {
-
                 size_t *out_t = (size_t *)out;
                 const size_t *in_t = (const size_t *)in;
                 sm4_expand_encrypt(ctx->Yi.c, ctx->EKi.c, ctx->ks);
 
-                //(*block) (ctx->Yi.c, ctx->EKi.c, key);
-
                 ++ctr;
                 if (is_endian.little)
-
                     PUTU32(ctx->Yi.c + 12, ctr);
                 else
                     ctx->Yi.d[3] = ctr;
@@ -579,7 +536,6 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
                 in += 16;
                 len -= 16; // end GHASH
             }
-
             int q = 0;
             while (len)
             {
@@ -587,7 +543,6 @@ int gcm128_encrypt(GCM128_CONTEXT *ctx,
                 q++;
                 len--;
             }
-
             ctx->mres = n;
             return 0;
         } while (0);
@@ -629,7 +584,6 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
     unsigned int n, ctr;
     size_t i;
     u64 mlen = ctx->len.u[1];
-    // WBCRYPTO_block128_f block = ctx->block;
     void *key = ctx->key;
 
     mlen += len;
@@ -639,8 +593,6 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
 
     if (ctx->ares)
     {
-        /* First call to decrypt finalizes GHASH(AAD) */
-        // GCM_MUL(ctx, Xi);
         gcm_gmult_4bit(ctx->Xi.u, ctx->Htable);
         ctx->ares = 0;
     }
@@ -671,7 +623,6 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
                     n = (n + 1) % 16;
                 }
                 if (n == 0)
-                    // GCM_MUL(ctx, Xi);
                     gcm_gmult_4bit(ctx->Xi.u, ctx->Htable);
                 else
                 {
@@ -685,8 +636,6 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
                 size_t *out_t = (size_t *)out;
                 const size_t *in_t = (const size_t *)in;
                 sm4_expand_encrypt(ctx->Yi.c, ctx->EKi.c, ctx->ks);
-
-                //(*block) (ctx->Yi.c, ctx->EKi.c, key);
                 ++ctr;
 
                 if (is_endian.little)
@@ -712,7 +661,6 @@ int gcm128_decrypt(GCM128_CONTEXT *ctx,
             int q = 0;
             while (len)
             {
-
                 out[q] = in[q];
                 len--;
                 q++;

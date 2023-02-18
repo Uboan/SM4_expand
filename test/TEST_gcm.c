@@ -3,6 +3,8 @@
 #include "util.h"
 #include <time.h>
 #define TEST 10000
+#define size 64
+
 static const u8 IV[] = {
 	0xca, 0xfe, 0xba, 0xbe, 0xfa, 0xce, 0xdb, 0xad,
 	0xde, 0xca, 0xf8, 0x88};
@@ -46,7 +48,6 @@ void init_test_data(uint8_t *buf, long int amount)
 
 int maintest()
 { // 1 for SM4-256, 2 for SM4-128
-
 	GCM128_CONTEXT *ctx;
 	char KEY[] = {0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
 				  0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92,
@@ -79,94 +80,114 @@ int maintest()
 	gcm128_init(ctx, KEY128);
 	uint8_t buf[1048577];
 	uint8_t out_buf[1048577];
-	// uint8_t dec_buf[1048576];
 	init_test_data(buf, 1048577); //测试数据固定 9999
 	init_test_data(out_buf, 1048577);
-	// printf("??\n");
 
 	uint64_t amount;
 	uint64_t starttime, endtime, ans;
 
 	gcm128_setiv(ctx, IV, 12); //将IV放到ctx中
-
-	// printf("??setiv\n");
-	// dump_hex(IV,12);
-	// memset(out,0,128);
 	gcm128_aad(ctx, A, sizeof(A)); //sizeof(A) = 20
-	// printf("??add\n");
-	// printf("??\n");
-	printf("in:\n");
-	dump_hex(in, 64);
-	gcm128_encrypt(ctx, in, out, 64);
-	printf("\nout:\n");
-	dump_hex(out, 64);
-	gcm128_setiv(ctx, IV, 12);
-	gcm128_decrypt(ctx, out, in, 64);
-	printf("\nrecovered:\n");
-	dump_hex(in, 64);
 	
-	// for (amount = 16; amount <= 1048576; amount *= 4)
-	// {
+	for (amount = 16; amount <= 1048576; amount *= 4)
+	{
+		uint64_t i = 0;
+		time_t endwait = time(NULL) + 3, finish_crypt_time, start_crypt_time;
+		start_crypt_time = time(NULL);
+		while (time(NULL) < endwait)
+		{
+			i++;
+			gcm128_setiv(ctx, IV, 12);
+			gcm128_encrypt(ctx, buf, out_buf, amount);
+		}
+		finish_crypt_time = time(NULL);
 
-	// 	uint64_t i = 0;
-	// 	time_t endwait = time(NULL) + 3, finish_crypt_time, start_crypt_time;
-	// 	start_crypt_time = time(NULL);
-	// 	// starttime = start_rdtsc();
-	// 	while (time(NULL) < endwait)
-	// 	{
-	// 		i++;
-	// 		gcm128_setiv(ctx, IV, 12);
-	// 		gcm128_encrypt(ctx, buf, out_buf, amount);
-	// 	}
-	// 	finish_crypt_time = time(NULL);
+		printf("doing %s for 3s on %d size blocks %lld in %.2fs\t", cyphername[0], amount, i, (double)(finish_crypt_time - start_crypt_time));
+		printf("%.2fMbps\n", (double)(i * amount / 1000000));
 
-	// 	printf("doing %s for 3s on %d size blocks %lld in %.2fs\t", cyphername[0], amount, i, (double)(finish_crypt_time - start_crypt_time));
-	// 	printf("%.2fMbps\n", (double)(i * amount / 1000000));
-
-	// 	// gcm128_setiv(ctx,IV,12);
-
-	// 	starttime = start_rdtsc();
-	// 	for (i = 0; i < TEST; i++)
-	// 	{
-	// 		// printf("i = %d\n",i);
-	// 		gcm128_setiv(ctx, IV, 12);
-	// 		// printf("i = ??????????buf:\n");
-	// 		// dump_hex(buf,amount);
-
-	// 		gcm128_encrypt(ctx, buf, out_buf, amount);
-	// 		// printf("i = ??????????out:\n");
-	// 		// dump_hex(out_buf,amount);
-	// 	}
-	// 	endtime = end_rdtsc();
-	// 	ans = endtime - starttime;
-	// 	printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n", cyphername[0], amount, ans / amount / TEST);
-	// }
-#if 0
-	printf("encrypted:\n");
-	dump_hex(out,64);
-	//printf("\nT:%s\n",T);
-	gcm128_tag(ctx,T,16);
-	//gcm128_finish(ctx,T,16);
-	printf("T:\n");
-	
-	
-	dump_hex(T,16);
-	gcm128_setiv(ctx,IV,12);
-	dump_hex(IV,12);
-	gcm128_aad(ctx,A,sizeof(A));
-	gcm128_decrypt(ctx,out,out_de,64);
-	printf("\ndecrypted:\n");
-	dump_hex(out_de,64);
-	gcm128_tag(ctx,T,16);
-	printf("T:\n");
-	dump_hex(T,16);
-	//dump_hex(out_de);
-#endif
+		starttime = start_rdtsc();
+		for (i = 0; i < TEST; i++)
+		{
+			gcm128_setiv(ctx, IV, 12);
+			gcm128_encrypt(ctx, buf, out_buf, amount);
+		}
+		endtime = end_rdtsc();
+		ans = endtime - starttime;
+		printf("cpu cycles/byte in doing %s on %d size blocks for :%llu \n", cyphername[0], amount, ans / amount / TEST);
+	}
 	return 0;
+}
+
+void rand_8bit(uint8_t * A, int len)
+{
+	srand((unsigned)time(NULL));
+	if( A == NULL && len == 0 )
+	{
+		printf("rand input error!");
+		return 0; //可以设置一个error错误
+	}
+	for(int i = 0 ; i < len; i++)	
+	{
+		A[i] = 0x00 + rand()%256;
+	}	
+}
+int Isequal(uint8_t* a, uint8_t* b, int len)
+{
+	int i = 0; 
+	for(i = 0; i < len; i++)
+	{
+		if(a[i] != b[i])
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
+int correctness_test(int num, int *s, int k) //正确性测试
+{
+	char KEY[] = {0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
+				  0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92,
+				  0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
+				  0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92};
+	char KEY128[] = {0x5f, 0xea, 0x79, 0x3a, 0x2d, 0x6f, 0x97, 0x4d,
+					 0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92};
+	int i = 0;
+	uint8_t Plaintext[num][s[k]]; //随机生成128bit明文
+	for(i = 0 ; i < num; i++)
+		rand_8bit( Plaintext[i] , s[k] );
+	uint8_t Ciphertext[num][s[k]], deCiphertext[num][s[k]];//密文与解密文
+
+	GCM128_CONTEXT* ctx = (GCM128_CONTEXT*)malloc(sizeof(GCM128_CONTEXT));
+	
+	for(i = 0; i < num; i++)
+	{
+		gcm128_init(ctx, KEY128); //生成 轮密钥与轮哈希密钥
+		gcm128_setiv(ctx, IV, 12); 
+		gcm128_aad(ctx, A, sizeof(A)); //sizeof(A) = 20
+		gcm128_encrypt(ctx, Plaintext[i], Ciphertext[i], s[k]);
+		gcm128_setiv(ctx, IV, 12);
+		gcm128_decrypt(ctx, Ciphertext[i], deCiphertext[i], s[k]);
+		if(!Isequal(Plaintext[i],deCiphertext[i],s[k]))
+		{
+			printf("enc or dec error!!!!!!!!!");
+			return 0;
+		}
+	}
+	printf("correctness_test success!!!!!!!");
+	return 1;
 }
 
 int main()
 {
+	int s[4] = {16, 64, 256, 1024};
+	int num = 1024;
+	for(int i = 0; i < 4; i++)
+	{
+		if(correctness_test(num, s, i))
+			printf("----Correctness Test----\n for %d len,and for %d plaintexts passed!\n\n",s[i],num);
+
+	}
+	
 	maintest();
 	return 0;
 }
